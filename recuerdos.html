@@ -54,52 +54,61 @@
     <small>UWAIE - Kapo</small>
   </div>
 
- <div class="modal" id="modal" aria-hidden="true">
+<div class="modal" id="modal" aria-hidden="true">
   <div class="modal-bg" id="modalBg"></div>
+  <button class="modal-close" id="modalClose" aria-label="Cerrar">✕</button>
+  <img class="modal-img" id="modalImg" alt="Foto ampliada" />
+</div>
 
-  <div class="modal-box" role="dialog" aria-label="Foto ampliada">
-    <img class="modal-img" id="modalImg" alt="Foto ampliada" />
-  </div>
 </div>
 
 
   <script>
-    function pageGo(url){
-      document.body.classList.add('fade-out');
-      setTimeout(()=> location.href = url, 240);
-    }
-    document.getElementById('backCarta').addEventListener('click', ()=> pageGo('sorpresa.html'));
-    document.getElementById('backInicio').addEventListener('click', ()=> pageGo('index.html'));
+  const modal = document.getElementById('modal');
+  const modalImg = document.getElementById('modalImg');
+  const modalBg = document.getElementById('modalBg');
+  const modalClose = document.getElementById('modalClose');
 
-    // Modal
-    const modal = document.getElementById('modal');
-    const modalImg = document.getElementById('modalImg');
-    const modalBg = document.getElementById('modalBg');
+  function openModal(src){
+    modalImg.src = src;
+    modal.classList.add('open');
+    modal.setAttribute('aria-hidden','false');
+    document.body.style.overflow = 'hidden'; // evita scroll detrás
+  }
 
-    function bindGallery(id){
-      document.getElementById(id).addEventListener('click', (e)=>{
-        if(e.target.tagName !== 'IMG') return;
-        modalImg.src = e.target.src;
-        modal.classList.add('open');
-        modal.setAttribute('aria-hidden','false');
-      });
-    }
-    bindGallery('g1'); bindGallery('g2'); bindGallery('g3');
-
-    modalBg.addEventListener('click', ()=>{
-      modal.classList.remove('open');
-      modal.setAttribute('aria-hidden','true');
-      modalImg.src = '';
-    });
-    document.addEventListener('keydown', (e)=>{
-  if(e.key === 'Escape' && modal.classList.contains('open')){
+  function closeModal(){
     modal.classList.remove('open');
     modal.setAttribute('aria-hidden','true');
     modalImg.src = '';
+    document.body.style.overflow = ''; // restaura
   }
-});
 
-  </script>
+  // Abrir desde cualquier galería (g1, g2, g3 si existen)
+  ['g1','g2','g3'].forEach(id=>{
+    const g = document.getElementById(id);
+    if(!g) return;
+    g.addEventListener('click', (e)=>{
+      const img = e.target.closest('img');
+      if(!img) return;
+      openModal(img.src);
+    });
+  });
+
+  // Cerrar: tap/click fuera + botón
+  modalBg.addEventListener('click', closeModal);
+  modalClose.addEventListener('click', closeModal);
+
+  // Cerrar con ESC (PC)
+  document.addEventListener('keydown', (e)=>{
+    if(e.key === 'Escape' && modal.classList.contains('open')){
+      closeModal();
+    }
+  });
+
+  // Opcional: cerrar tocando la imagen (móvil friendly)
+  modalImg.addEventListener('click', closeModal);
+</script>
+
   <script src="app.js"></script>
 </body>
 </html>
