@@ -3,76 +3,109 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Sorpresa ✨</title>
+  <title>Sorpresa ❣️</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
-<body class="page fade-in">
-
-  <div class="bg-hearts" aria-hidden="true"></div>
+<body class="fade-in">
+  <div class="bg"></div>
+  <div class="hearts"></div>
   <div class="confetti" id="confetti"></div>
 
-  <main class="wrap">
-    <section class="card big-card">
-      <p class="mini">Sorpresa ✨</p>
-      <h1 class="title2">Te pienso más de lo que crees</h1>
-      <p class="subtitle2">y aunque estés lejos, quería estar cerquita de alguna forma.</p>
+  <audio id="bgm" preload="auto" loop>
+    <source src="audio/uwaie.mp3" type="audio/mpeg">
+    <!-- Alternativa si no renombraste:
+    <source src="audio/UWAIE%20-%20Kapo%20%28Video%20Oficial%29.mp3" type="audio/mpeg">
+    -->
+  </audio>
 
-      <!-- ✍️ AQUÍ PEGAS TU CARTA -->
-      <div class="letter">
-        <p>
-          Hola preciosa 🤍<br><br>
-          (Aquí escribe tu carta. Mantén 8–12 líneas para que se sienta elegante.)<br><br>
-          Me encanta tu forma de ser… y sí, estás hermosa.  
-          Me enamoran tus fotos, tu sonrisa, y cómo me haces sentir incluso a la distancia.<br><br>
-          Y por eso quería preguntarte algo simple…
-        </p>
-      </div>
+  <main class="page">
+    <div class="container">
+      <section class="card">
+        <p class="mini">Sorpresa ❣️</p>
+        <h1>Te pienso más de lo que crees</h1>
+        <p>y aunque estés lejos, quería estar cerquita de alguna forma mi amor.</p>
 
-      <div class="row">
-        <button class="btn primary pulse" id="btnAsk" type="button">
-          ¿Quieres ser mi 14 de febrero? 💘
-        </button>
+        <div class="letter">
+          <p>
+            Hola preciosa ❣️<br><br>
+            (Aquí escribe tu carta. Si quieres, pégamela y te la dejo perfecta.)<br><br>
+            Me encantan tus fotos, tu sonrisa… y sí, estás hermosa.
+            Me haces sentir bonito incluso a la distancia.<br><br>
+            Y por eso quería preguntarte algo simple…
+          </p>
+        </div>
 
-        <button class="btn ghost" type="button" onclick="go('recuerdos.html')">
-          Ver recuerdos 📸
-        </button>
+        <div class="row" style="margin-top:18px;">
+          <button class="btn primary pulse" id="btnAsk">¿Quieres ser mi 14 de febrero? 💘</button>
+        </div>
 
-        <button class="btn ghost" type="button" onclick="go('index.html')">
-          Volver ↩️
-        </button>
-      </div>
+        <div class="row" style="margin-top:12px;">
+          <button class="btn" onclick="pageGo('recuerdos.html')">Ver recuerdos 📸</button>
+          <button class="btn" onclick="pageGo('index.html')">Volver ↩️</button>
+        </div>
 
-      <div class="reveal" id="reveal" aria-hidden="true">
-        <p class="big">💞 Entonces queda así: tú y yo, este 14.</p>
-        <p class="small">PD: cuando regreses, te debo una cita como se debe.</p>
+        <div class="reveal" id="reveal" aria-hidden="true">
+          <p class="big">💞 Entonces queda así: tú y yo, este 14.</p>
+          <p class="small">PD: cuando regreses, te debo una cita como se debe.</p>
 
-        <!-- ✅ Cambia tu número -->
-        <a class="btn primary" style="margin-top:10px; display:inline-flex;"
-           target="_blank" rel="noopener"
-           href="https://wa.me/51999999999?text=Sí%20💘%20acepto%20ser%20tu%2014%20de%20febrero">
-          Decirte que SÍ por WhatsApp 💬
-        </a>
-      </div>
+          <!-- CAMBIA TU NÚMERO -->
+          <div class="row" style="margin-top:12px;">
+            <a class="btn primary" target="_blank" rel="noopener"
+              href="https://wa.me/51990367042?text=Sí%20💘%20acepto%20ser%20tu%2014%20de%20febrero">
+              Decirte que SÍ por WhatsApp 💬
+            </a>
+          </div>
+        </div>
 
-    </section>
+      </section>
+    </div>
   </main>
 
+  <div class="player">
+    <button class="btn primary" id="playBtn">▶</button>
+    <small>UWAIE - Kapo</small>
+  </div>
+
   <script>
-    function go(url){
+    function pageGo(url){
       document.body.classList.add('fade-out');
-      setTimeout(()=> location.href = url, 260);
+      setTimeout(()=> location.href = url, 240);
     }
 
-    // Confeti + corazones
+    // ===== Audio persistente =====
+    const audio = document.getElementById('bgm');
+    const playBtn = document.getElementById('playBtn');
+
+    const savedTime = Number(localStorage.getItem('bgm_time') || 0);
+    const savedPlay = localStorage.getItem('bgm_play') === '1';
+    if (!Number.isNaN(savedTime) && savedTime > 0) audio.currentTime = Math.min(savedTime, Math.max(0, audio.duration || savedTime));
+
+    function setUI(playing){ playBtn.textContent = playing ? '⏸' : '▶'; }
+
+    async function startMusic(){
+      try{ await audio.play(); localStorage.setItem('bgm_play','1'); setUI(true); }
+      catch(e){ setUI(false); }
+    }
+    function pauseMusic(){ audio.pause(); localStorage.setItem('bgm_play','0'); setUI(false); }
+
+    if(savedPlay) startMusic(); else setUI(false);
+    setInterval(()=> localStorage.setItem('bgm_time', String(audio.currentTime || 0)), 800);
+
+    playBtn.addEventListener('click', ()=> audio.paused ? startMusic() : pauseMusic());
+    window.addEventListener('pointerdown', ()=> {
+      if(localStorage.getItem('bgm_play') === '1' && audio.paused) startMusic();
+    }, { once:false });
+
+    // ===== Confeti + corazones =====
     function launchConfetti(){
       const wrap = document.getElementById('confetti');
       wrap.innerHTML = '';
-      const n = 90;
+      const n = 95;
       for(let k=0;k<n;k++){
         const p = document.createElement('i');
         p.style.left = Math.random()*100 + 'vw';
         p.style.animationDelay = (Math.random()*0.35) + 's';
-        p.style.background = `hsl(${Math.floor(Math.random()*360)},90%,65%)`;
+        p.style.background = `hsl(${Math.floor(Math.random()*30)+330}, 90%, 70%)`; // rosado/nude
         p.style.width = (8 + Math.random()*6) + 'px';
         p.style.height = (10 + Math.random()*10) + 'px';
         wrap.appendChild(p);
@@ -98,12 +131,13 @@
     const btnAsk = document.getElementById('btnAsk');
     const reveal = document.getElementById('reveal');
 
-    btnAsk.addEventListener('click', ()=>{
+    btnAsk.addEventListener('click', async ()=>{
+      if(audio.paused) await startMusic();
       launchConfetti();
       floatHearts();
       reveal.classList.add('show');
-      reveal.setAttribute('aria-hidden', 'false');
-      if (navigator.vibrate) navigator.vibrate([30,20,30]);
+      reveal.setAttribute('aria-hidden','false');
+      if(navigator.vibrate) navigator.vibrate([30,20,30]);
     });
   </script>
 </body>
