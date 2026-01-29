@@ -3,55 +3,55 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Sorpresa ❣️</title>
+  <title>Sorpresa ✨</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body class="fade-in">
   <div class="bg"></div>
   <div class="hearts"></div>
-  <div class="confetti" id="confetti"></div>
+  <div class="heart-burst" id="burst"></div>
 
   <audio id="bgm" preload="auto" loop>
     <source src="audio/uwaie.mp3" type="audio/mpeg">
-    <!-- Alternativa si no renombraste:
-    <source src="audio/UWAIE%20-%20Kapo%20%28Video%20Oficial%29.mp3" type="audio/mpeg">
-    -->
   </audio>
 
   <main class="page">
     <div class="container">
       <section class="card">
-        <p class="mini">Sorpresa ❣️</p>
+        <p class="mini">Sorpresa ✨</p>
         <h1>Te pienso más de lo que crees</h1>
-        <p>y aunque estés lejos, quería estar cerquita de alguna forma mi amor.</p>
+        <p>y aunque estés lejos, quería estar cerquita de alguna forma.</p>
 
         <div class="letter">
           <p>
-            Hola preciosa ❣️<br><br>
-            (Aquí escribe tu carta. Si quieres, pégamela y te la dejo perfecta.)<br><br>
-            Me encantan tus fotos, tu sonrisa… y sí, estás hermosa.
-            Me haces sentir bonito incluso a la distancia.<br><br>
+            Hola preciosa 🤍<br><br>
+            Me encanta tu forma de ser y cómo me haces sentir…
+            incluso a la distancia.<br><br>
+            Me enamoran tus fotos, tu sonrisa, y todo lo bonito que eres.<br><br>
             Y por eso quería preguntarte algo simple…
           </p>
         </div>
 
-        <div class="row" style="margin-top:18px;">
+        <!-- Botones en columna como pediste -->
+        <div class="stack">
           <button class="btn primary pulse" id="btnAsk">¿Quieres ser mi 14 de febrero? 💘</button>
-        </div>
-
-        <div class="row" style="margin-top:12px;">
-          <button class="btn" onclick="pageGo('recuerdos.html')">Ver recuerdos 📸</button>
-          <button class="btn" onclick="pageGo('index.html')">Volver ↩️</button>
+          <button class="btn" id="goRecuerdos">Recuerdos 📸</button>
+          <button class="btn" id="goVolver">Volver ↩️</button>
         </div>
 
         <div class="reveal" id="reveal" aria-hidden="true">
-          <p class="big">💞 Entonces queda así: tú y yo, este 14.</p>
-          <p class="small">PD: cuando regreses, te debo una cita como se debe.</p>
+          <p class="bigTitle">✨ Este 14 es nuestro primero… y lo elijo contigo.</p>
+          <p class="bigText">
+            Aunque sea a la distancia, mi amor, tú sabes que siempre te voy a amar.
+            Gracias por darme la oportunidad de vivir este 14 contigo y por aceptarme.<br><br>
+            Sé que ahora será diferente… pero más adelante lo celebraremos como se debe.<br>
+            <b>PD:</b> llegando, nuestra cita queda pendiente. 💗
+          </p>
 
-          <!-- CAMBIA TU NÚMERO -->
-          <div class="row" style="margin-top:12px;">
+          <!-- Opcional: botón WhatsApp si quieres -->
+          <div class="row" style="margin-top:14px;">
             <a class="btn primary" target="_blank" rel="noopener"
-              href="https://wa.me/51990367042?text=Sí%20💘%20acepto%20ser%20tu%2014%20de%20febrero">
+               href="https://wa.me/51999999999?text=Sí%20💘%20acepto%20ser%20tu%2014%20de%20febrero">
               Decirte que SÍ por WhatsApp 💬
             </a>
           </div>
@@ -71,74 +71,36 @@
       document.body.classList.add('fade-out');
       setTimeout(()=> location.href = url, 240);
     }
+    document.getElementById('goRecuerdos').addEventListener('click', ()=> pageGo('recuerdos.html'));
+    document.getElementById('goVolver').addEventListener('click', ()=> pageGo('index.html'));
 
-    // ===== Audio persistente =====
-    const audio = document.getElementById('bgm');
-    const playBtn = document.getElementById('playBtn');
-
-    const savedTime = Number(localStorage.getItem('bgm_time') || 0);
-    const savedPlay = localStorage.getItem('bgm_play') === '1';
-    if (!Number.isNaN(savedTime) && savedTime > 0) audio.currentTime = Math.min(savedTime, Math.max(0, audio.duration || savedTime));
-
-    function setUI(playing){ playBtn.textContent = playing ? '⏸' : '▶'; }
-
-    async function startMusic(){
-      try{ await audio.play(); localStorage.setItem('bgm_play','1'); setUI(true); }
-      catch(e){ setUI(false); }
-    }
-    function pauseMusic(){ audio.pause(); localStorage.setItem('bgm_play','0'); setUI(false); }
-
-    if(savedPlay) startMusic(); else setUI(false);
-    setInterval(()=> localStorage.setItem('bgm_time', String(audio.currentTime || 0)), 800);
-
-    playBtn.addEventListener('click', ()=> audio.paused ? startMusic() : pauseMusic());
-    window.addEventListener('pointerdown', ()=> {
-      if(localStorage.getItem('bgm_play') === '1' && audio.paused) startMusic();
-    }, { once:false });
-
-    // ===== Confeti + corazones =====
-    function launchConfetti(){
-      const wrap = document.getElementById('confetti');
+    // MUCHOS CORAZONES al click (sin confeti)
+    function heartsBurst(){
+      const wrap = document.getElementById('burst');
       wrap.innerHTML = '';
-      const n = 95;
-      for(let k=0;k<n;k++){
-        const p = document.createElement('i');
-        p.style.left = Math.random()*100 + 'vw';
-        p.style.animationDelay = (Math.random()*0.35) + 's';
-        p.style.background = `hsl(${Math.floor(Math.random()*30)+330}, 90%, 70%)`; // rosado/nude
-        p.style.width = (8 + Math.random()*6) + 'px';
-        p.style.height = (10 + Math.random()*10) + 'px';
-        wrap.appendChild(p);
+      const n = 140; // bastantes
+      for(let i=0;i<n;i++){
+        const h = document.createElement('i');
+        h.textContent = '❤';
+        h.style.left = (Math.random()*100) + 'vw';
+        h.style.fontSize = (14 + Math.random()*26) + 'px';
+        h.style.animationDelay = (Math.random()*0.35) + 's';
+        h.style.opacity = (0.65 + Math.random()*0.35).toFixed(2);
+        wrap.appendChild(h);
       }
       setTimeout(()=> wrap.innerHTML='', 2200);
-    }
-
-    function floatHearts(){
-      const times = 14;
-      for(let i=0;i<times;i++){
-        setTimeout(()=>{
-          const h = document.createElement('div');
-          h.className = 'float-heart';
-          h.textContent = '❤';
-          h.style.left = (10 + Math.random()*80) + 'vw';
-          h.style.fontSize = (16 + Math.random()*22) + 'px';
-          document.body.appendChild(h);
-          setTimeout(()=> h.remove(), 1800);
-        }, i*110);
-      }
     }
 
     const btnAsk = document.getElementById('btnAsk');
     const reveal = document.getElementById('reveal');
 
-    btnAsk.addEventListener('click', async ()=>{
-      if(audio.paused) await startMusic();
-      launchConfetti();
-      floatHearts();
+    btnAsk.addEventListener('click', ()=>{
+      heartsBurst();
       reveal.classList.add('show');
       reveal.setAttribute('aria-hidden','false');
       if(navigator.vibrate) navigator.vibrate([30,20,30]);
     });
   </script>
+  <script src="app.js"></script>
 </body>
 </html>
