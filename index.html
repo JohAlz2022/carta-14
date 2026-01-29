@@ -6,78 +6,105 @@
   <title>Para mi persona favorita 💘</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
-<body class="page fade-in">
-  <div class="bg-hearts" aria-hidden="true"></div>
+<body class="fade-in">
+  <div class="bg"></div>
+  <div class="hearts"></div>
 
-  <!-- Música de fondo -->
-  <audio id="bgm" src="audio/uwaie.mp3" loop></audio>
+  <!-- Audio global (se reanuda por localStorage) -->
+  <audio id="bgm" preload="auto" loop>
+    <source src="audio/uwaie.mp3" type="audio/mpeg">
+    <!-- Si NO renombraste, usa esto en vez de arriba:
+    <source src="audio/UWAIE%20-%20Kapo%20%28Video%20Oficial%29.mp3" type="audio/mpeg">
+    -->
+  </audio>
 
-  <div class="music">
-    <button class="btn ghost pulse" id="btnMusic" type="button">🔊 Activar música</button>
+  <main class="page">
+    <div class="container">
+      <section class="card">
+        <p class="mini">Para ti mi amor</p>
+        <h1>Lo mejor que me pasó este año…</h1>
+        <p>te hice algo especial. Espero te guste. <b>Hecho con amor mi Dani</b> 🤍</p>
+
+        <div class="row" style="margin-top:18px;">
+          <button class="btn primary pulse" id="goSorpresa">Ver sorpresa </button>
+        </div>
+
+        <div class="row" style="margin-top:12px;">
+          <button class="btn secondary" id="toggleMusic">▶ Música</button>
+          <a class="btn" target="_blank" rel="noopener"
+             href="https://open.spotify.com/search/UWAIE%20Kapo">Spotify</a>
+          <a class="btn" target="_blank" rel="noopener"
+             href="https://www.youtube.com/results?search_query=UWAIE+Kapo">YouTube</a>
+        </div>
+
+        <p style="margin-top:12px;">Mi Dani, abre esto con calma y con audífonos 😌</p>
+      </section>
+    </div>
+  </main>
+
+  <!-- Mini-player -->
+  <div class="player">
+    <button class="btn primary" id="playBtn">▶</button>
+    <small id="track">UWAIE - Kapo</small>
   </div>
 
-  <header class="hero2">
-    <div class="glass stagger">
-      <p class="mini">Para mi persona favorita</p>
-      <h1 class="title">Lo mejor que me pasó este año…</h1>
-      <p class="subtitle2">Te hice algo especial. Espero te guste. Hecho con amor 🤍</p>
-
-      <div class="row">
-        <button class="btn primary pulse" type="button" onclick="go('sorpresa.html')">
-          Ver sorpresa ✨
-        </button>
-      </div>
-
-      <div class="row">
-        <a class="btn ghost" target="_blank" rel="noopener"
-           href="https://open.spotify.com/search/UWAIE%20Kapo">
-          🎵 UWAIE - Kapo (Spotify)
-        </a>
-        <a class="btn ghost" target="_blank" rel="noopener"
-           href="https://www.youtube.com/results?search_query=UWAIE+Kapo">
-          🎬 UWAIE - Kapo (YouTube)
-        </a>
-      </div>
-
-      <p class="hint2">Mi Dani abre esto con calma y con audífonos 😌</p>
-    </div>
-  </header>
-
   <script>
-    function go(url){
+    // ===== Helpers =====
+    function pageGo(url){
       document.body.classList.add('fade-out');
       setTimeout(()=> location.href = url, 240);
     }
 
-    const bgm = document.getElementById('bgm');
-    const btnMusic = document.getElementById('btnMusic');
-    let musicOn = false;
+    // ===== Audio persistente entre páginas =====
+    const audio = document.getElementById('bgm');
+    const playBtn = document.getElementById('playBtn');
+    const toggleMusic = document.getElementById('toggleMusic');
 
-    function enableMusic(){
-      bgm.volume = 0.35;
-      bgm.muted = false;
-      bgm.play().then(()=>{
-        musicOn = true;
-        btnMusic.textContent = '⏸ Pausar música';
-      }).catch(()=>{
-        // si falla, el usuario debe tocar el botón (ya lo está tocando)
-      });
+    function setUI(playing){
+      playBtn.textContent = playing ? '⏸' : '▶';
+      toggleMusic.textContent = playing ? '⏸ Música' : '▶ Música';
     }
 
-    btnMusic.addEventListener('click', ()=>{
-      if(!musicOn){
-        enableMusic();
-      }else{
-        bgm.pause();
-        musicOn = false;
-        btnMusic.textContent = '🔊 Activar música';
+    // restaurar estado
+    const savedTime = Number(localStorage.getItem('bgm_time') || 0);
+    const savedPlay = localStorage.getItem('bgm_play') === '1';
+    if (!Number.isNaN(savedTime) && savedTime > 0) audio.currentTime = Math.min(savedTime, Math.max(0, audio.duration || savedTime));
+
+    async function startMusic(){
+      try{
+        await audio.play();
+        localStorage.setItem('bgm_play','1');
+        setUI(true);
+      }catch(e){
+        // Autoplay bloqueado hasta que el usuario haga click, normal.
+        setUI(false);
       }
+    }
+    function pauseMusic(){
+      audio.pause();
+      localStorage.setItem('bgm_play','0');
+      setUI(false);
+    }
+
+    // si antes estaba reproduciendo, intenta arrancar (puede requerir interacción)
+    if(savedPlay) startMusic(); else setUI(false);
+
+    // guardar tiempo
+    setInterval(()=> localStorage.setItem('bgm_time', String(audio.currentTime || 0)), 800);
+
+    playBtn.addEventListener('click', ()=> audio.paused ? startMusic() : pauseMusic());
+    toggleMusic.addEventListener('click', ()=> audio.paused ? startMusic() : pauseMusic());
+
+    // Botón principal: inicia música + navega
+    document.getElementById('goSorpresa').addEventListener('click', async ()=>{
+      if(audio.paused) await startMusic();
+      pageGo('sorpresa.html');
     });
 
-    // Intento: activar al primer click en cualquier parte (por políticas del navegador)
-    document.addEventListener('click', ()=>{
-      if(!musicOn) enableMusic();
-    }, { once:true });
+    // Primer click en la página: si estaba marcado como play, intenta arrancar
+    window.addEventListener('pointerdown', ()=> {
+      if(localStorage.getItem('bgm_play') === '1' && audio.paused) startMusic();
+    }, { once:false });
   </script>
 </body>
 </html>
