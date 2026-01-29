@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Para ti 💘</title>
+  <link rel="stylesheet" href="styles.css" />
+  <meta name="description" content="Una carta con nuestros recuerdos." />
+</head>
+<body>
+  <header class="hero">
+    <div class="overlay"></div>
+    <div class="hero-content">
+      <p class="tag">Para <span id="nombre">Mi persona favorita</span></p>
+      <h1>Una carta, a la distancia</h1>
+      <p class="subtitle">Hecha con cariño (y un poquito de código).</p>
+
+      <button class="btn" id="btnPlay" type="button">▶ Música</button>
+      <audio id="audio" preload="auto">
+        <!-- Pon aquí un mp3 TUYO (recomendado) o déjalo sin música -->
+        <!-- <source src="audio/mi-cancion.mp3" type="audio/mpeg"> -->
+      </audio>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="card">
+      <h2>Mi carta</h2>
+      <p>
+        Hola, amor. (sí, amor 😌)<br><br>
+        Aunque hoy estemos lejos, te pienso más de lo que imaginas.
+        Me encanta lo que somos cuando hablamos, cuando nos reímos, cuando nos contamos todo.
+        Gracias por llegar a mi vida y hacerla más bonita.<br><br>
+        No quiero esperar a “tener el momento perfecto” para decirte algo simple y real:
+        me gustas en serio, me haces bien… y quiero construir esto contigo, incluso a la distancia.<br><br>
+        <strong>¿Quieres ser mi enamorada este 14? 💘</strong>
+      </p>
+
+      <div class="actions">
+        <!-- Cambia el número por el tuyo con código de país -->
+        <a class="btn primary"
+           href="https://wa.me/51999999999?text=Sí%20🥺%20quiero%20ser%20tu%20enamorada%20💘"
+           target="_blank" rel="noopener">
+          Decirte que SÍ por WhatsApp 💬
+        </a>
+        <button class="btn ghost" id="btnReveal" type="button">Ver sorpresa ✨</button>
+      </div>
+
+      <div class="reveal" id="reveal" aria-hidden="true">
+        <p class="big">💞 Te elijo, a la distancia y en persona.</p>
+        <p class="small">PD: Cuando regreses, te debo una cita como se debe.</p>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Nuestros recuerdos</h2>
+      <p class="hint">Toque en una foto para verla mejor.</p>
+
+      <div class="gallery" id="gallery">
+        <!-- Reemplaza o duplica estas líneas según tus fotos -->
+        <img src="fotos/01.jpg" alt="Foto 1" loading="lazy" />
+        <img src="fotos/02.jpg" alt="Foto 2" loading="lazy" />
+        <img src="fotos/03.jpg" alt="Foto 3" loading="lazy" />
+        <img src="fotos/04.jpg" alt="Foto 4" loading="lazy" />
+        <img src="fotos/05.jpg" alt="Foto 5" loading="lazy" />
+        <img src="fotos/06.jpg" alt="Foto 6" loading="lazy" />
+      </div>
+    </section>
+
+    <footer class="footer">
+      <p>Hecho por mí, para ti. 🫶</p>
+    </footer>
+  </main>
+
+  <!-- Modal simple para ver fotos -->
+  <div class="modal" id="modal" aria-hidden="true">
+    <div class="modal-bg" id="modalBg"></div>
+    <img class="modal-img" id="modalImg" alt="Foto ampliada" />
+  </div>
+
+  <script>
+    // Personaliza nombre (opcional)
+    // document.getElementById('nombre').textContent = 'Valeria';
+
+    // Música (si agregas MP3)
+    const audio = document.getElementById('audio');
+    const btnPlay = document.getElementById('btnPlay');
+    let playing = false;
+
+    btnPlay.addEventListener('click', async () => {
+      try {
+        if (!playing) {
+          await audio.play();
+          playing = true;
+          btnPlay.textContent = '⏸ Pausar';
+        } else {
+          audio.pause();
+          playing = false;
+          btnPlay.textContent = '▶ Música';
+        }
+      } catch (e) {
+        alert('Si quieres música, agrega un archivo MP3 y actualiza el <source> en el HTML.');
+      }
+    });
+
+    // Sorpresa
+    const btnReveal = document.getElementById('btnReveal');
+    const reveal = document.getElementById('reveal');
+    btnReveal.addEventListener('click', () => {
+      reveal.classList.toggle('show');
+      reveal.setAttribute('aria-hidden', reveal.classList.contains('show') ? 'false' : 'true');
+    });
+
+    // Modal de fotos
+    const modal = document.getElementById('modal');
+    const modalImg = document.getElementById('modalImg');
+    const modalBg = document.getElementById('modalBg');
+
+    document.getElementById('gallery').addEventListener('click', (e) => {
+      if (e.target.tagName !== 'IMG') return;
+      modalImg.src = e.target.src;
+      modal.classList.add('open');
+      modal.setAttribute('aria-hidden', 'false');
+    });
+
+    modalBg.addEventListener('click', () => {
+      modal.classList.remove('open');
+      modal.setAttribute('aria-hidden', 'true');
+      modalImg.src = '';
+    });
+  </script>
+</body>
+</html>
