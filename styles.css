@@ -304,3 +304,41 @@ p{
   opacity:1;
   transform: translateX(-50%) translateY(-2px);
 }
+
+/* ===========================
+   FIX: Player abajo-derecha
+   =========================== */
+.player{
+  position: fixed !important;
+  right: 14px !important;
+  bottom: 14px !important;
+
+  left: auto !important;
+  top: auto !important;
+  transform: none !important;
+
+  z-index: 999999 !important;
+
+  display:flex !important;
+  gap:10px !important;
+  align-items:center !important;
+
+  padding: 10px 12px !important;
+  border-radius: 18px !important;
+
+  background: rgba(255,255,255,.72) !important;
+  border: 1px solid rgba(255, 91, 143, .22) !important;
+  backdrop-filter: blur(10px) !important;
+  box-shadow: 0 16px 45px rgba(0,0,0,.15) !important;
+}
+
+/* En celular, más compacto */
+@media (max-width: 520px){
+  .player{
+    right: 10px !important;
+    bottom: 10px !important;
+    padding: 9px 10px !important;
+  }
+  .player small{ display:none !important; } /* opcional */
+}
+
