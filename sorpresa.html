@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Sorpresa ✨</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="page fade-in">
+
+  <div class="bg-hearts" aria-hidden="true"></div>
+  <div class="confetti" id="confetti"></div>
+
+  <main class="wrap">
+    <section class="card big-card">
+      <p class="mini">Sorpresa ✨</p>
+      <h1 class="title2">Te pienso más de lo que crees</h1>
+      <p class="subtitle2">y aunque estés lejos, quería estar cerquita de alguna forma.</p>
+
+      <!-- ✍️ AQUÍ PEGAS TU CARTA -->
+      <div class="letter">
+        <p>
+          Hola preciosa 🤍<br><br>
+          (Aquí escribe tu carta. Mantén 8–12 líneas para que se sienta elegante.)<br><br>
+          Me encanta tu forma de ser… y sí, estás hermosa.  
+          Me enamoran tus fotos, tu sonrisa, y cómo me haces sentir incluso a la distancia.<br><br>
+          Y por eso quería preguntarte algo simple…
+        </p>
+      </div>
+
+      <div class="row">
+        <button class="btn primary pulse" id="btnAsk" type="button">
+          ¿Quieres ser mi 14 de febrero? 💘
+        </button>
+
+        <button class="btn ghost" type="button" onclick="go('recuerdos.html')">
+          Ver recuerdos 📸
+        </button>
+
+        <button class="btn ghost" type="button" onclick="go('index.html')">
+          Volver ↩️
+        </button>
+      </div>
+
+      <div class="reveal" id="reveal" aria-hidden="true">
+        <p class="big">💞 Entonces queda así: tú y yo, este 14.</p>
+        <p class="small">PD: cuando regreses, te debo una cita como se debe.</p>
+
+        <!-- ✅ Cambia tu número -->
+        <a class="btn primary" style="margin-top:10px; display:inline-flex;"
+           target="_blank" rel="noopener"
+           href="https://wa.me/51999999999?text=Sí%20💘%20acepto%20ser%20tu%2014%20de%20febrero">
+          Decirte que SÍ por WhatsApp 💬
+        </a>
+      </div>
+
+    </section>
+  </main>
+
+  <script>
+    function go(url){
+      document.body.classList.add('fade-out');
+      setTimeout(()=> location.href = url, 260);
+    }
+
+    // Confeti + corazones
+    function launchConfetti(){
+      const wrap = document.getElementById('confetti');
+      wrap.innerHTML = '';
+      const n = 90;
+      for(let k=0;k<n;k++){
+        const p = document.createElement('i');
+        p.style.left = Math.random()*100 + 'vw';
+        p.style.animationDelay = (Math.random()*0.35) + 's';
+        p.style.background = `hsl(${Math.floor(Math.random()*360)},90%,65%)`;
+        p.style.width = (8 + Math.random()*6) + 'px';
+        p.style.height = (10 + Math.random()*10) + 'px';
+        wrap.appendChild(p);
+      }
+      setTimeout(()=> wrap.innerHTML='', 2200);
+    }
+
+    function floatHearts(){
+      const times = 14;
+      for(let i=0;i<times;i++){
+        setTimeout(()=>{
+          const h = document.createElement('div');
+          h.className = 'float-heart';
+          h.textContent = '❤';
+          h.style.left = (10 + Math.random()*80) + 'vw';
+          h.style.fontSize = (16 + Math.random()*22) + 'px';
+          document.body.appendChild(h);
+          setTimeout(()=> h.remove(), 1800);
+        }, i*110);
+      }
+    }
+
+    const btnAsk = document.getElementById('btnAsk');
+    const reveal = document.getElementById('reveal');
+
+    btnAsk.addEventListener('click', ()=>{
+      launchConfetti();
+      floatHearts();
+      reveal.classList.add('show');
+      reveal.setAttribute('aria-hidden', 'false');
+      if (navigator.vibrate) navigator.vibrate([30,20,30]);
+    });
+  </script>
+</body>
+</html>
