@@ -6,37 +6,51 @@
   <title>Recuerdos 📸</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
-<body class="page fade-in">
+<body class="fade-in">
+  <div class="bg"></div>
+  <div class="hearts"></div>
 
-  <div class="bg-hearts" aria-hidden="true"></div>
+  <audio id="bgm" preload="auto" loop>
+    <source src="audio/uwaie.mp3" type="audio/mpeg">
+  </audio>
 
-  <main class="wrap">
-    <section class="card">
-      <p class="mini">Nuestros recuerdos 📸</p>
-      <h1 class="title2">Momentos que me hacen sonreír</h1>
-      <p class="subtitle2">Toca una foto para verla mejor.</p>
+  <main class="page">
+    <div class="container">
+      <section class="card">
+        <p class="mini">Recuerdos 📸</p>
+        <h1>Momentos que me hacen sonreír</h1>
+        <p>Toca una foto para verla mejor.</p>
 
-      <h3 class="section-title">Juntos 🤍</h3>
-      <div class="gallery" id="gallery">
-        <img src="fotos/A1.jpeg" alt="Juntos 1" loading="lazy" />
-        <img src="fotos/A2.jpeg" alt="Juntos 2" loading="lazy" />
-        <img src="fotos/D1.jpeg" alt="Juntos 3" loading="lazy" />
-        <img src="fotos/D3.jpeg" alt="Juntos 4" loading="lazy" />
-      </div>
+        <div class="section-title">Juntos 🤍</div>
+        <div class="gallery" id="g1">
+          <img src="fotos/A1.jpeg" alt="Juntos 1" loading="lazy" />
+          <img src="fotos/A2.jpeg" alt="Juntos 2" loading="lazy" />
+          <img src="fotos/D1.jpeg" alt="Juntos 3" loading="lazy" />
+          <img src="fotos/D2.jpeg" alt="Juntos 4" loading="lazy" />
+          <img src="fotos/D3.jpeg" alt="Juntos 5" loading="lazy" />
+          <img src="fotos/D4.jpeg" alt="Juntos 6" loading="lazy" />
+          <img src="fotos/D5.jpeg" alt="Juntos 7" loading="lazy" />
+        </div>
 
-      <h3 class="section-title" style="margin-top:16px;">Ella (la que me enamora) ✨</h3>
-      <div class="gallery" id="gallery2">
-        <img src="fotos/WhatsApp%20Image%202026-01-29%20at%202.11.17%20AM.jpeg" alt="Ella 1" loading="lazy" />
-        <img src="fotos/WhatsApp%20Image%202026-01-29%20at%202.16.44%20AM.jpeg" alt="Ella 2" loading="lazy" />
-        <img src="fotos/WhatsApp%20Image%202026-01-29%20at%202.22.03%20AM.jpeg" alt="Ella 3" loading="lazy" />
-      </div>
+        <div class="section-title">Ella (la que me enamora) ✨</div>
+        <div class="gallery" id="g2">
+          <img src="fotos/WhatsApp%20Image%202026-01-29%20at%202.11.17%20AM.jpeg" alt="Ella 1" loading="lazy" />
+          <img src="fotos/WhatsApp%20Image%202026-01-29%20at%202.16.44%20AM.jpeg" alt="Ella 2" loading="lazy" />
+          <img src="fotos/WhatsApp%20Image%202026-01-29%20at%202.22.03%20AM.jpeg" alt="Ella 3" loading="lazy" />
+        </div>
 
-      <div class="row" style="margin-top:14px;">
-        <button class="btn primary" onclick="go('sorpresa.html')">Volver a la carta 💌</button>
-        <button class="btn ghost" onclick="go('index.html')">Inicio ↩️</button>
-      </div>
-    </section>
+        <div class="row" style="margin-top:16px;">
+          <button class="btn primary" onclick="pageGo('sorpresa.html')">Volver a la carta 💌</button>
+          <button class="btn" onclick="pageGo('index.html')">Inicio ↩️</button>
+        </div>
+      </section>
+    </div>
   </main>
+
+  <div class="player">
+    <button class="btn primary" id="playBtn">▶</button>
+    <small>UWAIE - Kapo</small>
+  </div>
 
   <!-- Modal -->
   <div class="modal" id="modal" aria-hidden="true">
@@ -45,26 +59,40 @@
   </div>
 
   <script>
-    function go(url){
+    function pageGo(url){
       document.body.classList.add('fade-out');
-      setTimeout(()=> location.href = url, 260);
+      setTimeout(()=> location.href = url, 240);
     }
 
+    // Audio persistente
+    const audio = document.getElementById('bgm');
+    const playBtn = document.getElementById('playBtn');
+    const savedTime = Number(localStorage.getItem('bgm_time') || 0);
+    const savedPlay = localStorage.getItem('bgm_play') === '1';
+    if (!Number.isNaN(savedTime) && savedTime > 0) audio.currentTime = Math.min(savedTime, Math.max(0, audio.duration || savedTime));
+
+    function setUI(playing){ playBtn.textContent = playing ? '⏸' : '▶'; }
+    async function startMusic(){ try{ await audio.play(); localStorage.setItem('bgm_play','1'); setUI(true);}catch(e){ setUI(false);} }
+    function pauseMusic(){ audio.pause(); localStorage.setItem('bgm_play','0'); setUI(false); }
+
+    if(savedPlay) startMusic(); else setUI(false);
+    setInterval(()=> localStorage.setItem('bgm_time', String(audio.currentTime || 0)), 800);
+    playBtn.addEventListener('click', ()=> audio.paused ? startMusic() : pauseMusic());
+
+    // Modal
     const modal = document.getElementById('modal');
     const modalImg = document.getElementById('modalImg');
     const modalBg = document.getElementById('modalBg');
 
     function bindGallery(id){
-      const g = document.getElementById(id);
-      g.addEventListener('click', (e)=>{
+      document.getElementById(id).addEventListener('click', (e)=>{
         if(e.target.tagName !== 'IMG') return;
         modalImg.src = e.target.src;
         modal.classList.add('open');
         modal.setAttribute('aria-hidden','false');
       });
     }
-    bindGallery('gallery');
-    bindGallery('gallery2');
+    bindGallery('g1'); bindGallery('g2');
 
     modalBg.addEventListener('click', ()=>{
       modal.classList.remove('open');
