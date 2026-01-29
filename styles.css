@@ -342,3 +342,64 @@ p{
   .player small{ display:none !important; } /* opcional */
 }
 
+/* ===========================
+   FIX: Modal fotos (PC + móvil)
+   =========================== */
+.modal{
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100dvh !important;
+
+  display: none !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  padding: 18px !important;
+  z-index: 999998 !important;
+}
+
+.modal.open{ display:flex !important; }
+
+.modal-bg{
+  position:absolute !important;
+  inset:0 !important;
+  background: rgba(20,10,15,.58) !important;
+}
+
+.modal-img{
+  position: relative !important;
+  max-width: min(980px, 92vw) !important;
+  max-height: 86dvh !important;
+  width: auto !important;
+  height: auto !important;
+
+  object-fit: contain !important;
+  object-position: center !important;
+
+  border-radius: 18px !important;
+  border: 1px solid rgba(255,255,255,.45) !important;
+  box-shadow: 0 18px 50px rgba(0,0,0,.35) !important;
+
+  background: rgba(255,255,255,.18) !important;
+}
+
+/* Botón cerrar (útil en celular) */
+.modal-close{
+  position: absolute !important;
+  top: 14px !important;
+  right: 14px !important;
+  z-index: 999999 !important;
+
+  width: 44px !important;
+  height: 44px !important;
+  border-radius: 14px !important;
+
+  border: 1px solid rgba(255, 91, 143, .22) !important;
+  background: rgba(255,255,255,.78) !important;
+
+  cursor: pointer !important;
+  font-size: 22px !important;
+  font-weight: 900 !important;
+  line-height: 1 !important;
+}
