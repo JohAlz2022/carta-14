@@ -7,25 +7,32 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body class="page fade-in">
-
   <div class="bg-hearts" aria-hidden="true"></div>
 
+  <!-- Música de fondo -->
+  <audio id="bgm" src="audio/uwaie.mp3" loop></audio>
+
+  <div class="music">
+    <button class="btn ghost pulse" id="btnMusic" type="button">🔊 Activar música</button>
+  </div>
+
   <header class="hero2">
-    <div class="glass">
+    <div class="glass stagger">
       <p class="mini">Para mi persona favorita</p>
       <h1 class="title">Lo mejor que me pasó este año…</h1>
-      <p class="subtitle2">te hice algo especial. Espero te guste. Hecho con amor mi Dani🤍</p>
+      <p class="subtitle2">Te hice algo especial. Espero te guste. Hecho con amor 🤍</p>
 
       <div class="row">
-        <button class="btn primary pulse" onclick="go('sorpresa.html')">
+        <button class="btn primary pulse" type="button" onclick="go('sorpresa.html')">
           Ver sorpresa ✨
         </button>
+      </div>
 
+      <div class="row">
         <a class="btn ghost" target="_blank" rel="noopener"
            href="https://open.spotify.com/search/UWAIE%20Kapo">
           🎵 UWAIE - Kapo (Spotify)
         </a>
-
         <a class="btn ghost" target="_blank" rel="noopener"
            href="https://www.youtube.com/results?search_query=UWAIE+Kapo">
           🎬 UWAIE - Kapo (YouTube)
@@ -39,8 +46,38 @@
   <script>
     function go(url){
       document.body.classList.add('fade-out');
-      setTimeout(()=> location.href = url, 260);
+      setTimeout(()=> location.href = url, 240);
     }
+
+    const bgm = document.getElementById('bgm');
+    const btnMusic = document.getElementById('btnMusic');
+    let musicOn = false;
+
+    function enableMusic(){
+      bgm.volume = 0.35;
+      bgm.muted = false;
+      bgm.play().then(()=>{
+        musicOn = true;
+        btnMusic.textContent = '⏸ Pausar música';
+      }).catch(()=>{
+        // si falla, el usuario debe tocar el botón (ya lo está tocando)
+      });
+    }
+
+    btnMusic.addEventListener('click', ()=>{
+      if(!musicOn){
+        enableMusic();
+      }else{
+        bgm.pause();
+        musicOn = false;
+        btnMusic.textContent = '🔊 Activar música';
+      }
+    });
+
+    // Intento: activar al primer click en cualquier parte (por políticas del navegador)
+    document.addEventListener('click', ()=>{
+      if(!musicOn) enableMusic();
+    }, { once:true });
   </script>
 </body>
 </html>
