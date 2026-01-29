@@ -3,108 +3,47 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Para mi persona favorita 💘</title>
+  <title>Para ti 💘</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body class="fade-in">
   <div class="bg"></div>
   <div class="hearts"></div>
 
-  <!-- Audio global (se reanuda por localStorage) -->
   <audio id="bgm" preload="auto" loop>
     <source src="audio/uwaie.mp3" type="audio/mpeg">
-    <!-- Si NO renombraste, usa esto en vez de arriba:
-    <source src="audio/UWAIE%20-%20Kapo%20%28Video%20Oficial%29.mp3" type="audio/mpeg">
-    -->
   </audio>
 
   <main class="page">
     <div class="container">
       <section class="card">
-        <p class="mini">Para ti mi amor</p>
+        <p class="mini">Para ti, mi amor 🤍</p>
         <h1>Lo mejor que me pasó este año…</h1>
         <p>te hice algo especial. Espero te guste. <b>Hecho con amor mi Dani</b> 🤍</p>
 
-        <div class="row" style="margin-top:18px;">
-          <button class="btn primary pulse" id="goSorpresa">Ver sorpresa </button>
+        <div class="row">
+          <button class="btn primary pulse" id="goSorpresa">Ver sorpresa ✨</button>
         </div>
 
-        <div class="row" style="margin-top:12px;">
-          <button class="btn secondary" id="toggleMusic">▶ Música</button>
-          <a class="btn" target="_blank" rel="noopener"
-             href="https://open.spotify.com/search/UWAIE%20Kapo">Spotify</a>
-          <a class="btn" target="_blank" rel="noopener"
-             href="https://www.youtube.com/results?search_query=UWAIE+Kapo">YouTube</a>
-        </div>
-
-        <p style="margin-top:12px;">Mi Dani, abre esto con calma y con audífonos 😌</p>
+        <p style="margin-top:14px;">Mi Dani, abre esto con calma y con audífonos 😌</p>
       </section>
     </div>
   </main>
 
-  <!-- Mini-player -->
   <div class="player">
     <button class="btn primary" id="playBtn">▶</button>
-    <small id="track">UWAIE - Kapo</small>
+    <small>UWAIE - Kapo</small>
   </div>
 
   <script>
-    // ===== Helpers =====
     function pageGo(url){
       document.body.classList.add('fade-out');
       setTimeout(()=> location.href = url, 240);
     }
-
-    // ===== Audio persistente entre páginas =====
-    const audio = document.getElementById('bgm');
-    const playBtn = document.getElementById('playBtn');
-    const toggleMusic = document.getElementById('toggleMusic');
-
-    function setUI(playing){
-      playBtn.textContent = playing ? '⏸' : '▶';
-      toggleMusic.textContent = playing ? '⏸ Música' : '▶ Música';
-    }
-
-    // restaurar estado
-    const savedTime = Number(localStorage.getItem('bgm_time') || 0);
-    const savedPlay = localStorage.getItem('bgm_play') === '1';
-    if (!Number.isNaN(savedTime) && savedTime > 0) audio.currentTime = Math.min(savedTime, Math.max(0, audio.duration || savedTime));
-
-    async function startMusic(){
-      try{
-        await audio.play();
-        localStorage.setItem('bgm_play','1');
-        setUI(true);
-      }catch(e){
-        // Autoplay bloqueado hasta que el usuario haga click, normal.
-        setUI(false);
-      }
-    }
-    function pauseMusic(){
-      audio.pause();
-      localStorage.setItem('bgm_play','0');
-      setUI(false);
-    }
-
-    // si antes estaba reproduciendo, intenta arrancar (puede requerir interacción)
-    if(savedPlay) startMusic(); else setUI(false);
-
-    // guardar tiempo
-    setInterval(()=> localStorage.setItem('bgm_time', String(audio.currentTime || 0)), 800);
-
-    playBtn.addEventListener('click', ()=> audio.paused ? startMusic() : pauseMusic());
-    toggleMusic.addEventListener('click', ()=> audio.paused ? startMusic() : pauseMusic());
-
-    // Botón principal: inicia música + navega
-    document.getElementById('goSorpresa').addEventListener('click', async ()=>{
-      if(audio.paused) await startMusic();
+    document.getElementById('goSorpresa').addEventListener('click', ()=>{
       pageGo('sorpresa.html');
     });
-
-    // Primer click en la página: si estaba marcado como play, intenta arrancar
-    window.addEventListener('pointerdown', ()=> {
-      if(localStorage.getItem('bgm_play') === '1' && audio.paused) startMusic();
-    }, { once:false });
   </script>
+  <script src="app.js"></script>
 </body>
 </html>
