@@ -21,27 +21,31 @@
         <h1>Momentos que me hacen sonreír</h1>
         <p>Toca una foto para verla mejor.</p>
 
-        <div class="section-title">Juntos 🤍</div>
+        <div class="section-title">Juntos 🤍 (A1, A2)</div>
         <div class="gallery" id="g1">
-          <img src="fotos/A1.jpeg" alt="Juntos 1" loading="lazy" />
-          <img src="fotos/A2.jpeg" alt="Juntos 2" loading="lazy" />
-          <img src="fotos/D1.jpeg" alt="Juntos 3" loading="lazy" />
-          <img src="fotos/D2.jpeg" alt="Juntos 4" loading="lazy" />
-          <img src="fotos/D3.jpeg" alt="Juntos 5" loading="lazy" />
-          <img src="fotos/D4.jpeg" alt="Juntos 6" loading="lazy" />
-          <img src="fotos/D5.jpeg" alt="Juntos 7" loading="lazy" />
+          <img src="fotos/A1.jpeg" alt="Juntos A1" loading="lazy" />
+          <img src="fotos/A2.jpeg" alt="Juntos A2" loading="lazy" />
         </div>
 
-        <div class="section-title">Ella (la que me enamora) ✨</div>
+        <div class="section-title">Cosas que me gustan y me hacen amarte ✨ (D1–D5)</div>
         <div class="gallery" id="g2">
+          <img src="fotos/D1.jpeg" alt="D1" loading="lazy" />
+          <img src="fotos/D2.jpeg" alt="D2" loading="lazy" />
+          <img src="fotos/D3.jpeg" alt="D3" loading="lazy" />
+          <img src="fotos/D4.jpeg" alt="D4" loading="lazy" />
+          <img src="fotos/D5.jpeg" alt="D5" loading="lazy" />
+        </div>
+
+        <div class="section-title">Ella (la que me enamora) 💗</div>
+        <div class="gallery" id="g3">
           <img src="fotos/WhatsApp%20Image%202026-01-29%20at%202.11.17%20AM.jpeg" alt="Ella 1" loading="lazy" />
           <img src="fotos/WhatsApp%20Image%202026-01-29%20at%202.16.44%20AM.jpeg" alt="Ella 2" loading="lazy" />
           <img src="fotos/WhatsApp%20Image%202026-01-29%20at%202.22.03%20AM.jpeg" alt="Ella 3" loading="lazy" />
         </div>
 
         <div class="row" style="margin-top:16px;">
-          <button class="btn primary" onclick="pageGo('sorpresa.html')">Volver a la carta 💌</button>
-          <button class="btn" onclick="pageGo('index.html')">Inicio ↩️</button>
+          <button class="btn primary" id="backCarta">Volver a la carta 💌</button>
+          <button class="btn" id="backInicio">Inicio ↩️</button>
         </div>
       </section>
     </div>
@@ -52,7 +56,6 @@
     <small>UWAIE - Kapo</small>
   </div>
 
-  <!-- Modal -->
   <div class="modal" id="modal" aria-hidden="true">
     <div class="modal-bg" id="modalBg"></div>
     <img class="modal-img" id="modalImg" alt="Foto ampliada" />
@@ -63,21 +66,8 @@
       document.body.classList.add('fade-out');
       setTimeout(()=> location.href = url, 240);
     }
-
-    // Audio persistente
-    const audio = document.getElementById('bgm');
-    const playBtn = document.getElementById('playBtn');
-    const savedTime = Number(localStorage.getItem('bgm_time') || 0);
-    const savedPlay = localStorage.getItem('bgm_play') === '1';
-    if (!Number.isNaN(savedTime) && savedTime > 0) audio.currentTime = Math.min(savedTime, Math.max(0, audio.duration || savedTime));
-
-    function setUI(playing){ playBtn.textContent = playing ? '⏸' : '▶'; }
-    async function startMusic(){ try{ await audio.play(); localStorage.setItem('bgm_play','1'); setUI(true);}catch(e){ setUI(false);} }
-    function pauseMusic(){ audio.pause(); localStorage.setItem('bgm_play','0'); setUI(false); }
-
-    if(savedPlay) startMusic(); else setUI(false);
-    setInterval(()=> localStorage.setItem('bgm_time', String(audio.currentTime || 0)), 800);
-    playBtn.addEventListener('click', ()=> audio.paused ? startMusic() : pauseMusic());
+    document.getElementById('backCarta').addEventListener('click', ()=> pageGo('sorpresa.html'));
+    document.getElementById('backInicio').addEventListener('click', ()=> pageGo('index.html'));
 
     // Modal
     const modal = document.getElementById('modal');
@@ -92,7 +82,7 @@
         modal.setAttribute('aria-hidden','false');
       });
     }
-    bindGallery('g1'); bindGallery('g2');
+    bindGallery('g1'); bindGallery('g2'); bindGallery('g3');
 
     modalBg.addEventListener('click', ()=>{
       modal.classList.remove('open');
@@ -100,5 +90,6 @@
       modalImg.src = '';
     });
   </script>
+  <script src="app.js"></script>
 </body>
 </html>
