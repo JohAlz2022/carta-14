@@ -6,16 +6,96 @@
   <title>Para ti 💘</title>
   <link rel="stylesheet" href="styles.css" />
   <meta name="description" content="Una carta con nuestros recuerdos." />
+
+  <style>
+    /* Extras de animación (encima de tu styles.css) */
+    .hero-content { animation: floatIn .9s ease both; }
+    @keyframes floatIn { from{opacity:0; transform: translateY(16px)} to{opacity:1; transform: translateY(0)} }
+
+    .card { animation: cardIn .8s ease both; }
+    @keyframes cardIn { from{opacity:0; transform: translateY(10px)} to{opacity:1; transform: translateY(0)} }
+
+    .btn { transition: transform .15s ease, filter .2s ease; }
+    .btn:hover { transform: translateY(-2px) scale(1.01); filter: brightness(1.06); }
+    .btn:active { transform: translateY(0) scale(.99); }
+
+    .gallery img { transition: transform .18s ease, filter .2s ease; }
+    .gallery img:hover { transform: translateY(-2px) scale(1.01); filter: brightness(1.05); }
+
+    .pulse {
+      position: relative;
+      overflow: hidden;
+    }
+    .pulse::after{
+      content:"";
+      position:absolute;
+      inset:-40%;
+      background: radial-gradient(circle, rgba(255,255,255,.20), transparent 55%);
+      transform: translateX(-80%);
+      animation: shine 2.6s ease-in-out infinite;
+      pointer-events:none;
+    }
+    @keyframes shine{
+      0%{ transform: translateX(-80%) rotate(10deg); opacity:.2}
+      45%{ opacity:.55 }
+      100%{ transform: translateX(80%) rotate(10deg); opacity:.2}
+    }
+
+    .typewriter {
+      border-right: 2px solid rgba(255,255,255,.6);
+      padding-right: 6px;
+      white-space: nowrap;
+      overflow: hidden;
+      display: inline-block;
+    }
+
+    /* Confeti */
+    .confetti {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 9999;
+    }
+    .confetti i{
+      position:absolute;
+      top:-10px;
+      width: 10px;
+      height: 14px;
+      opacity: .95;
+      border-radius: 3px;
+      animation: fall 1.8s linear forwards;
+      transform: rotate(0deg);
+    }
+    @keyframes fall{
+      to{
+        transform: translateY(105vh) rotate(360deg);
+        opacity: 1;
+      }
+    }
+
+    /* Sorpresa visual */
+    .reveal { display:none; }
+    .reveal.show { display:block; animation: pop .35s ease both; }
+    @keyframes pop { from{opacity:0; transform: scale(.98)} to{opacity:1; transform: scale(1)} }
+  </style>
 </head>
+
 <body>
   <header class="hero">
     <div class="overlay"></div>
     <div class="hero-content">
-      <p class="tag">Para <span id="nombre">Mi persona favorita</span></p>
-      <h1>Una carta, a la distancia</h1>
-      <p class="subtitle">Hecha con cariño (y un poquito de código).</p>
+      <p class="tag">Para <span id="nombre">mi persona favorita</span></p>
 
-      <button class="btn" id="btnPlay" type="button">▶ Música</button>
+      <h1><span class="typewriter" id="tw"></span></h1>
+
+      <p class="subtitle">Hecho con cariño… y un poquito de código. ✨</p>
+
+      <div style="display:flex; gap:10px; flex-wrap:wrap;">
+        <button class="btn pulse" id="btnPlay" type="button">▶ Música</button>
+        <button class="btn ghost" id="btnScroll" type="button">Ver la carta ↓</button>
+      </div>
+
       <audio id="audio" preload="auto">
         <!-- Opcional: si luego subes un MP3 a /audio, descomenta esto -->
         <!-- <source src="audio/mi-cancion.mp3" type="audio/mpeg"> -->
@@ -23,32 +103,36 @@
     </div>
   </header>
 
-  <main class="wrap">
-    <section class="card">
+  <main class="wrap" id="main">
+    <section class="card" id="carta">
       <h2>Mi carta</h2>
       <p>
-        Hola, amor. (sí, amor 😌)<br><br>
-        Aunque hoy estemos lejos, te pienso más de lo que imaginas.
-        Me encanta lo que somos cuando hablamos, cuando nos reímos, cuando nos contamos todo.
-        Gracias por llegar a mi vida y hacerla más bonita.<br><br>
-        No quiero esperar a “tener el momento perfecto” para decirte algo simple y real:
-        me gustas en serio, me haces bien… y quiero construir esto contigo, incluso a la distancia.<br><br>
-        <strong>¿Quieres ser mi enamorada este 14? 💘</strong>
+        Hola 🤍<br><br>
+        Sé que ahora estamos a la distancia, pero igual quería hacer algo especial para ti.
+        Me encanta hablar contigo, reír contigo, y sentir que aunque estemos lejos… te tengo cerquita en mi mente.<br><br>
+        No quiero hacerlo largo, solo decirte algo simple y sincero:
+        <strong>me encantas</strong> y me ilusiona todo lo bonito que podemos vivir.<br><br>
+        Y por eso quería preguntarte…
       </p>
 
       <div class="actions">
-        <!-- CAMBIA TU NÚMERO AQUÍ (con código de país) -->
-        <a class="btn primary"
-           href="https://wa.me/51999999999?text=Sí%20🥺%20quiero%20ser%20tu%20enamorada%20💘"
+        <!-- BOTÓN PRINCIPAL -->
+        <button class="btn primary pulse" id="btnAsk" type="button">
+          ¿Quieres ser mi 14 de febrero? 💘
+        </button>
+
+        <!-- WhatsApp: CAMBIA TU NÚMERO -->
+        <a class="btn ghost"
+           id="waLink"
+           href="https://wa.me/51999999999?text=Sí%20💘%20acepto%20ser%20tu%2014%20de%20febrero"
            target="_blank" rel="noopener">
-          Decirte que SÍ por WhatsApp 💬
+          Responder por WhatsApp 💬
         </a>
-        <button class="btn ghost" id="btnReveal" type="button">Ver sorpresa ✨</button>
       </div>
 
       <div class="reveal" id="reveal" aria-hidden="true">
-        <p class="big">💞 Te elijo, a la distancia y en persona.</p>
-        <p class="small">PD: Cuando regreses, te debo una cita como se debe.</p>
+        <p class="big">💞 Entonces queda así: tú y yo, este 14.</p>
+        <p class="small">PD: Te debo una cita como se debe cuando regreses.</p>
       </div>
     </section>
 
@@ -57,12 +141,11 @@
       <p class="hint">Toca una foto para verla mejor.</p>
 
       <div class="gallery" id="gallery">
+        <!-- AJUSTA ESTOS NOMBRES A LOS DE TU REPO -->
         <img src="fotos/A1.jpeg" alt="Foto 1" loading="lazy" />
         <img src="fotos/A2.jpeg" alt="Foto 2" loading="lazy" />
         <img src="fotos/D1.jpeg" alt="Foto 3" loading="lazy" />
         <img src="fotos/D3.jpeg" alt="Foto 4" loading="lazy" />
-
-        <!-- WhatsApp (con espacios escapados) -->
         <img src="fotos/WhatsApp%20Image%202026-01-29%20at%202.11.17%20AM.jpeg" alt="Foto 5" loading="lazy" />
         <img src="fotos/WhatsApp%20Image%202026-01-29%20at%202.16.44%20AM.jpeg" alt="Foto 6" loading="lazy" />
         <img src="fotos/WhatsApp%20Image%202026-01-29%20at%202.22.03%20AM.jpeg" alt="Foto 7" loading="lazy" />
@@ -74,6 +157,9 @@
     </footer>
   </main>
 
+  <!-- Confeti -->
+  <div class="confetti" id="confetti"></div>
+
   <!-- Modal simple para ver fotos -->
   <div class="modal" id="modal" aria-hidden="true">
     <div class="modal-bg" id="modalBg"></div>
@@ -81,10 +167,24 @@
   </div>
 
   <script>
-    // Personaliza nombre (opcional)
-    // document.getElementById('nombre').textContent = 'SU NOMBRE';
+    // ====== Typewriter ======
+    const tw = document.getElementById('tw');
+    const text = "Te hice algo especial ✨";
+    let i = 0;
+    function type() {
+      tw.textContent = text.slice(0, i++);
+      if (i <= text.length) requestAnimationFrame(type);
+      else tw.classList.remove('typewriter'); // quita el cursor al final si quieres
+    }
+    tw.classList.add('typewriter');
+    type();
 
-    // Música (si agregas MP3)
+    // ====== Scroll a la carta ======
+    document.getElementById('btnScroll').addEventListener('click', () => {
+      document.getElementById('carta').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+
+    // ====== Música (opcional) ======
     const audio = document.getElementById('audio');
     const btnPlay = document.getElementById('btnPlay');
     let playing = false;
@@ -101,19 +201,11 @@
           btnPlay.textContent = '▶ Música';
         }
       } catch (e) {
-        alert('Si quieres música, agrega un archivo MP3 y actualiza el <source> en el HTML.');
+        alert('Si quieres música, sube un MP3 a /audio y descomenta el <source> en el HTML.');
       }
     });
 
-    // Sorpresa
-    const btnReveal = document.getElementById('btnReveal');
-    const reveal = document.getElementById('reveal');
-    btnReveal.addEventListener('click', () => {
-      reveal.classList.toggle('show');
-      reveal.setAttribute('aria-hidden', reveal.classList.contains('show') ? 'false' : 'true');
-    });
-
-    // Modal de fotos
+    // ====== Modal de fotos ======
     const modal = document.getElementById('modal');
     const modalImg = document.getElementById('modalImg');
     const modalBg = document.getElementById('modalBg');
@@ -130,6 +222,43 @@
       modal.setAttribute('aria-hidden', 'true');
       modalImg.src = '';
     });
+
+    // ====== Confeti ======
+    function launchConfetti() {
+      const wrap = document.getElementById('confetti');
+      wrap.innerHTML = '';
+      const n = 90;
+
+      for (let k = 0; k < n; k++) {
+        const p = document.createElement('i');
+        p.style.left = Math.random() * 100 + 'vw';
+        p.style.animationDelay = (Math.random() * 0.35) + 's';
+        p.style.transform = `rotate(${Math.random()*180}deg)`;
+        // colores sin hardcodear mucho: variación por hsl
+        p.style.background = `hsl(${Math.floor(Math.random()*360)}, 90%, 65%)`;
+        p.style.width = (8 + Math.random()*6) + 'px';
+        p.style.height = (10 + Math.random()*10) + 'px';
+        wrap.appendChild(p);
+      }
+      setTimeout(() => wrap.innerHTML = '', 2200);
+    }
+
+    // ====== Botón principal ======
+    const btnAsk = document.getElementById('btnAsk');
+    const reveal = document.getElementById('reveal');
+
+    btnAsk.addEventListener('click', () => {
+      launchConfetti();
+      reveal.classList.add('show');
+      reveal.setAttribute('aria-hidden', 'false');
+
+      // Pequeña vibración en móviles compatibles
+      if (navigator.vibrate) navigator.vibrate([30, 20, 30]);
+    });
+
+    // ====== Personalizaciones opcionales ======
+    // document.getElementById('nombre').textContent = 'SU NOMBRE';
+    // document.getElementById('waLink').href = 'https://wa.me/51TU_NUMERO?text=...';
   </script>
 </body>
 </html>
