@@ -518,3 +518,82 @@ p{
 .countdown-box.done{
   border-color: rgba(255, 91, 143, .30);
 }
+
+/* =========================================
+   COUNTDOWN GRANDE (reloj fijo centro-izq)
+   ========================================= */
+
+.countdown-dock{
+  position: fixed;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 999997;
+
+  width: min(320px, 88vw);
+  padding: 14px 14px;
+  border-radius: 22px;
+
+  background: rgba(255,255,255,.78);
+  border: 1px solid rgba(255, 91, 143, .22);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 18px 55px rgba(0,0,0,.14);
+
+  text-align: center;
+}
+
+.cd-title{
+  font-weight: 950;
+  font-size: 13px;
+  line-height: 1.2;
+  color: rgba(42,28,34,.88);
+  margin-bottom: 10px;
+}
+
+.cd-clock-grid{
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.cd-chip{
+  background: rgba(255,255,255,.78);
+  border: 1px solid rgba(42,28,34,.08);
+  border-radius: 16px;
+  padding: 10px 8px;
+  box-shadow: 0 12px 30px rgba(0,0,0,.06);
+}
+
+.cd-num{
+  display:block;
+  font-size: 26px;
+  font-weight: 1000;
+  line-height: 1;
+  color: rgba(255, 91, 143, .95);
+  letter-spacing: .5px;
+}
+
+.cd-lab{
+  display:block;
+  margin-top: 6px;
+  font-size: 11px;
+  font-weight: 900;
+  opacity: .70;
+  letter-spacing: .8px;
+}
+
+/* En móviles: que no estorbe, se va abajo-centro */
+@media (max-width: 600px){
+  .countdown-dock{
+    left: 50%;
+    top: auto;
+    bottom: 74px; /* encima del reproductor */
+    transform: translateX(-50%);
+    width: min(360px, 94vw);
+  }
+  .cd-num{ font-size: 24px; }
+}
+
+/* Si quieres que el texto fallback (data-countdown-badge) no se vea */
+.cd-clock{ display:none; }
+
