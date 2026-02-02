@@ -3,46 +3,45 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Para mi persona favorita</title>
+  <title>Para mi persona favorita 💗</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body class="fade-in">
   <div class="bg"></div>
   <div class="hearts"></div>
 
+  <audio id="bgm" preload="auto" loop>
+    <source src="UWAIE - Kapo (Video Oficial).mp3" type="audio/mpeg">
+  </audio>
+
   <main class="page">
     <div class="container">
-      <section class="card">
-        <p class="mini">Para mi persona favorita</p>
+      <section class="card hero">
+        <p class="mini">Para ti, mi amor</p>
         <h1>Lo mejor que me pasó este año…</h1>
-        <p>Te hice algo especial, mi amor. Espero te guste. Hecho con amor 🤍</p>
+        <p class="lead">te hice algo especial. Espero te guste. <b>Hecho con amor</b> 💗</p>
 
-        <div class="row">
-          <button class="btn primary pulse" id="goSorpresa">Ver sorpresa ✨</button>
-          <button class="btn" id="goRecuerdos">Recuerdos 📸</button>
+        <div class="row" style="margin-top:14px">
+          <button class="btn primary pulse" id="btnStart">Ver sorpresa ✨</button>
         </div>
 
-        <p style="margin-top:12px; font-weight:800; opacity:.85;">
-          Mi amor, abre esto con calma y con audífonos 😊
-        </p>
+        <p class="hint">Mi amor, ábrelo con calma y con audífonos 😌</p>
       </section>
     </div>
   </main>
 
-  <!-- Audio + reproductor fijo -->
-  <audio id="bgm" preload="auto" loop></audio>
-  <div class="player">
-    <button class="btn primary" id="playBtn">▶</button>
+  <!-- Player fijo abajo-derecha -->
+  <div class="player" aria-label="Reproductor">
+    <button class="btn primary" id="playBtn" type="button">▶</button>
     <small>UWAIE - Kapo</small>
   </div>
 
   <script>
-    function pageGo(url){
+    // Ir a sorpresa con transición
+    document.getElementById('btnStart').addEventListener('click', ()=>{
       document.body.classList.add('fade-out');
-      setTimeout(()=> location.href = url, 240);
-    }
-    document.getElementById('goSorpresa').addEventListener('click', ()=> pageGo('sorpresa.html'));
-    document.getElementById('goRecuerdos').addEventListener('click', ()=> pageGo('recuerdos.html'));
+      setTimeout(()=> location.href = 'sorpresa.html', 240);
+    });
   </script>
   <script src="app.js"></script>
 </body>
