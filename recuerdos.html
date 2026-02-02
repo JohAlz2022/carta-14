@@ -2,66 +2,13 @@
 <html lang="es">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Recuerdos 📸</title>
   <link rel="stylesheet" href="styles.css" />
-
-  <style>
-    /* Fondo completo */
-    html, body { min-height: 100%; }
-    body { overflow-x: hidden; }
-
-    /* Player abajo-derecha fijo */
-    .player{
-      position: fixed !important;
-      right: 14px !important;
-      bottom: 14px !important;
-      left: auto !important;
-      top: auto !important;
-      transform: none !important;
-      z-index: 999999 !important;
-    }
-    .page{ padding-bottom: 140px !important; }
-
-    /* Modal robusto (PC + móvil) */
-    .modal{ z-index: 999998 !important; }
-    .modal-box{
-      width: min(980px, 94vw) !important;
-      height: min(86vh, 760px) !important;
-      display: flex !important;
-      align-items: center !important;
-      justify-content: center !important;
-      position: relative !important;
-      overflow: hidden !important;
-      background: rgba(255,255,255,.20) !important;
-    }
-    .modal-img{
-      width: 100% !important;
-      height: 100% !important;
-      object-fit: contain !important;
-      object-position: center !important;
-      display: block !important;
-    }
-    @media (max-width: 600px){
-      .modal{ padding: 10px !important; }
-      .modal-box{
-        width: 96vw !important;
-        height: 82vh !important;
-        border-radius: 16px !important;
-      }
-    }
-  </style>
 </head>
-
 <body class="fade-in">
   <div class="bg"></div>
   <div class="hearts"></div>
-
-  <!-- Música (2 sources: tu nombre largo + fallback) -->
-  <audio id="bgm" preload="auto" loop playsinline>
-    <source src="UWAIE%20-%20Kapo%20%28Video%20Oficial%29.mp3" type="audio/mpeg">
-    <source src="audio/uwaie.mp3" type="audio/mpeg">
-  </audio>
 
   <main class="page">
     <div class="container">
@@ -71,163 +18,81 @@
         <p>Toca una foto para verla mejor.</p>
 
         <div class="section-title">Juntos 🤍 (A1, A2)</div>
-        <div class="gallery" id="galJuntos">
-          <img src="A1.jpeg" alt="Juntos A1" loading="lazy">
-          <img src="A2.jpeg" alt="Juntos A2" loading="lazy">
-        </div>
-
-        <div class="section-title">Más momentos 💞</div>
-        <div class="gallery" id="galMas">
-          <img src="WhatsApp%20Image%202026-01-29%20at%202.11.17%20AM.jpeg" alt="Momento 1" loading="lazy">
-          <img src="WhatsApp%20Image%202026-01-29%20at%202.16.44%20AM.jpeg" alt="Momento 2" loading="lazy">
-          <img src="WhatsApp%20Image%202026-01-29%20at%202.22.03%20AM.jpeg" alt="Momento 3" loading="lazy">
-        </div>
+        <div class="gallery" id="galJuntos"></div>
 
         <div class="section-title">Cosas que me gustan y me hacen amarte ✨ (D1–D5)</div>
-        <div class="gallery" id="galD">
-          <img src="D1.jpeg" alt="D1" loading="lazy">
-          <img src="D2.jpeg" alt="D2" loading="lazy">
-          <img src="D3.jpeg" alt="D3" loading="lazy">
-          <img src="D4.jpeg" alt="D4" loading="lazy">
-          <img src="D5.jpeg" alt="D5" loading="lazy">
-        </div>
+        <div class="gallery" id="galCosas"></div>
+
+        <div class="section-title">Más momentos 📷 (WhatsApp)</div>
+        <div class="gallery" id="galExtra"></div>
 
         <div class="row" style="margin-top:16px;">
-          <button class="btn primary" id="goCarta" type="button">Volver a la carta 💌</button>
-          <button class="btn" id="goInicio" type="button">Inicio ↩️</button>
+          <button class="btn primary" id="goCarta">Volver a la carta 💌</button>
+          <button class="btn" id="goInicio">Inicio ↩️</button>
         </div>
       </section>
     </div>
   </main>
 
-  <!-- MODAL -->
+  <!-- Modal -->
   <div class="modal" id="modal" aria-hidden="true">
     <div class="modal-bg" id="modalBg"></div>
-    <div class="modal-box" role="dialog" aria-modal="true" aria-label="Vista de imagen">
-      <button class="modal-close" id="modalClose" type="button" aria-label="Cerrar">×</button>
-      <img class="modal-img" id="modalImg" alt="">
+    <div class="modal-box">
+      <button class="modal-close" id="modalClose" aria-label="Cerrar">×</button>
+      <img class="modal-img" id="modalImg" alt="Foto">
     </div>
   </div>
 
-  <!-- Player fijo -->
+  <!-- Audio + reproductor fijo -->
+  <audio id="bgm" preload="auto" loop></audio>
   <div class="player">
-    <button class="btn primary" id="playBtn" type="button">▶</button>
+    <button class="btn primary" id="playBtn">▶</button>
     <small>UWAIE - Kapo</small>
   </div>
 
-  <div class="toast" id="toast">Toca ▶ para activar la música 🎧</div>
-
   <script>
-    // Fade navigation
     function pageGo(url){
-      saveAudioState();
       document.body.classList.add('fade-out');
       setTimeout(()=> location.href = url, 240);
     }
     document.getElementById('goCarta').addEventListener('click', ()=> pageGo('sorpresa.html'));
     document.getElementById('goInicio').addEventListener('click', ()=> pageGo('index.html'));
 
-    // ===== Modal (visor) =====
-    const modal = document.getElementById('modal');
-    const modalBg = document.getElementById('modalBg');
-    const modalClose = document.getElementById('modalClose');
-    const modalImg = document.getElementById('modalImg');
+    // ✅ NO renombrar: encodeURI convierte espacios a %20 automáticamente.
+    // Si tus imágenes estuvieran dentro de una carpeta, cambia IMG_BASE = "fotos/".
+    const IMG_BASE = "";
 
-    function openModal(src, alt){
-      modalImg.src = src;
-      modalImg.alt = alt || '';
-      modal.classList.add('open');
-      modal.setAttribute('aria-hidden','false');
-      document.body.style.overflow = 'hidden';
+    const juntos = ["A1.jpeg", "A2.jpeg"];
+    const cosas  = ["D1.jpeg","D2.jpeg","D3.jpeg","D4.jpeg","D5.jpeg"];
+
+    const extra = [
+      "WhatsApp Image 2026-01-29 at 2.11.17 AM.jpeg",
+      "WhatsApp Image 2026-01-29 at 2.16.44 AM.jpeg",
+      "WhatsApp Image 2026-01-29 at 2.22.03 AM.jpeg"
+    ];
+
+    function renderGallery(targetId, files){
+      const wrap = document.getElementById(targetId);
+      wrap.innerHTML = "";
+      files.forEach((name)=>{
+        const img = document.createElement("img");
+        img.loading = "lazy";
+        img.alt = "Recuerdo";
+        img.src = encodeURI(IMG_BASE + name);
+        img.addEventListener("click", ()=>{
+          if(window.__OPEN_MODAL){
+            window.__OPEN_MODAL(img.src);
+          }
+        });
+        wrap.appendChild(img);
+      });
     }
 
-    function closeModal(){
-      modal.classList.remove('open');
-      modal.setAttribute('aria-hidden','true');
-      modalImg.src = '';
-      document.body.style.overflow = '';
-    }
-
-    modalBg.addEventListener('click', closeModal);
-    modalClose.addEventListener('click', closeModal);
-
-    document.addEventListener('keydown', (e)=>{
-      if(e.key === 'Escape' && modal.classList.contains('open')) closeModal();
-    });
-
-    // Delegación: cualquier imagen dentro de .gallery abre modal
-    document.querySelectorAll('.gallery img').forEach(img=>{
-      img.addEventListener('click', ()=> openModal(img.getAttribute('src'), img.getAttribute('alt')));
-    });
-
-    // ===== Audio persistente =====
-    const bgm = document.getElementById('bgm');
-    const playBtn = document.getElementById('playBtn');
-    const toast = document.getElementById('toast');
-
-    function showToast(msg){
-      toast.textContent = msg;
-      toast.classList.add('show');
-      setTimeout(()=> toast.classList.remove('show'), 1800);
-    }
-
-    function setBtn(isPlaying){
-      playBtn.textContent = isPlaying ? '⏸' : '▶';
-      playBtn.setAttribute('aria-pressed', String(isPlaying));
-    }
-
-    function saveAudioState(){
-      try{
-        localStorage.setItem('bgm_time', String(bgm.currentTime || 0));
-        localStorage.setItem('bgm_playing', bgm.paused ? '0' : '1');
-      }catch(e){}
-    }
-
-    async function tryResume(){
-      let t = 0, shouldPlay = false;
-      try{
-        t = parseFloat(localStorage.getItem('bgm_time') || '0') || 0;
-        shouldPlay = (localStorage.getItem('bgm_playing') === '1');
-      }catch(e){}
-
-      if (t > 0 && Number.isFinite(t)) {
-        try { bgm.currentTime = t; } catch(e){}
-      }
-
-      if(shouldPlay){
-        try{
-          await bgm.play();
-          setBtn(true);
-        }catch(e){
-          setBtn(false);
-          showToast('Toca ▶ para activar la música 🎧');
-        }
-      }else{
-        setBtn(false);
-      }
-    }
-
-    playBtn.addEventListener('click', async ()=>{
-      try{
-        if(bgm.paused){
-          await bgm.play();
-          setBtn(true);
-          try{ localStorage.setItem('bgm_playing','1'); }catch(e){}
-        }else{
-          bgm.pause();
-          setBtn(false);
-          try{ localStorage.setItem('bgm_playing','0'); }catch(e){}
-        }
-      }catch(e){
-        showToast('Tu navegador bloqueó el audio. Toca ▶ otra vez.');
-      }
-      saveAudioState();
-    });
-
-    window.addEventListener('beforeunload', saveAudioState);
-    document.addEventListener('visibilitychange', ()=>{ if(document.hidden) saveAudioState(); });
-
-    tryResume();
+    renderGallery("galJuntos", juntos);
+    renderGallery("galCosas", cosas);
+    renderGallery("galExtra", extra);
   </script>
+
+  <script src="app.js"></script>
 </body>
 </html>
