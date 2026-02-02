@@ -12,14 +12,15 @@
   <div class="hearts"></div>
   <div class="heart-burst" id="burst"></div>
 
-  <!-- Música (tu app.js debería manejar play/pause) -->
+  <!-- BADGE contador -->
+  <div class="countdown-badge" data-countdown-badge></div>
+
   <audio id="bgm" preload="auto" loop>
     <source src="audio/uwaie.mp3" type="audio/mpeg">
   </audio>
 
   <main class="page">
     <div class="container">
-
       <section class="card card-letter">
         <p class="mini">Sorpresa ✨</p>
 
@@ -37,38 +38,39 @@
             aun así siento que te conozco bien, amor. Confío en ti y puedo entregarme a ti, mi amor.<br><br>
 
             Tal vez yo no sea el chico más romántico o el más detallista, pero trato de mejorar por ti.
-            Quiero que te sientas valorada y amada por mí. Quiero que, a pesar de todo tu pasado tal vez te fallaron
-            no sientas que yo te haré lo mismo. Quiero que confíes en mí.<br><br>
+            Quiero que te sientas valorada y amada por mí… y que confíes en mí.<br><br>
 
-            También quiero estar juntos para ver nuestros logros, vivir muchas experiencias, viajar, salir, comer, bailar,
-            tomar algo… así sea lo que sea, pero estar juntos.<br><br>
+            Quiero que vivamos muchas experiencias: viajar, salir, comer, bailar… lo que sea, pero juntos.<br><br>
 
-            Sé que no te esperabas que sucediera lo de nosotros, igual que yo… pero es la cosa más bonita que me pasó.
-            Espero que sea el tuyo también, amor.<br><br>
+            Y aunque este viaje sea un reto al comienzo, no quita el hecho de que yo me enamoré cada día más de ti.
+            Si superamos esto (y lo tomo por hecho), sé que estaremos juntos toda la vida.<br><br>
 
-            Tal vez este viaje al comienzo de nuestra historia es un reto fuerte, porque por lo general al inicio de una relación
-            es estar siempre juntos y conocernos; pero a pesar de eso no quita el hecho de que yo me enamoré cada día más de ti.
-            Y si superamos esto (y lo tomo por hecho), sé que estaremos juntos toda la vida.<br><br>
-
-            Quiero que te diviertas, te relajes y me extrañes mucho, mi amor… porque yo sí te extraño mucho.
-            Y quería que tengas algo bonito para este 14, porque es nuestro primer 14.
-            Te lo mandaré días antes porque quería saber…<br><br>
+            Te extraño mucho, mi amor… y quería que tengas algo bonito para este 14, porque es nuestro primer 14.<br><br>
 
             Y por eso quería preguntarte algo simple…
           </p>
         </div>
 
-        <!-- Botones en columna -->
+        <!-- CONTADOR EN LA CARTA -->
+        <div class="countdown-box" id="countdownBox">
+          <p class="countdown-title">⏳ El tiempo para volvernos a ver…</p>
+          <div class="countdown-grid">
+            <div class="cd"><span class="num" id="cd_d">0</span><span class="lab">días</span></div>
+            <div class="cd"><span class="num" id="cd_h">00</span><span class="lab">horas</span></div>
+            <div class="cd"><span class="num" id="cd_m">00</span><span class="lab">min</span></div>
+            <div class="cd"><span class="num" id="cd_s">00</span><span class="lab">seg</span></div>
+          </div>
+          <p class="countdown-sub" id="cd_msg">11 de abril: te espero con ganas y con amor 💗</p>
+        </div>
+
         <div class="stack">
           <button class="btn primary pulse btn-big" id="btnAsk">¿Quieres ser mi 14 de febrero? 💘</button>
           <button class="btn" id="goRecuerdos">Recuerdos 📸</button>
           <button class="btn" id="goVolver">Volver ↩️</button>
         </div>
 
-        <!-- Sección que aparece al aceptar -->
         <div class="reveal" id="reveal" aria-hidden="true">
           <p class="bigTitle">¡Gracias mi amor por aceptarme! 🥺💗</p>
-
           <p class="bigText">
             Aunque sea a la distancia, mi amor, tú sabes que siempre te voy a amar.
             Gracias por darme la oportunidad de vivir este 14 contigo.<br><br>
@@ -78,43 +80,42 @@
           </p>
 
           <div class="row" style="margin-top:14px;">
-            <a class="btn primary btn-big" id="btnWhats"
-               target="_blank" rel="noopener"
-               href="#">
+            <a class="btn primary btn-big" id="btnWhats" target="_blank" rel="noopener" href="#">
               Decirte que SÍ por WhatsApp 💬
             </a>
           </div>
         </div>
 
       </section>
-
     </div>
   </main>
 
-  <!-- Player (posición la controla styles.css con el FIX) -->
   <div class="player">
     <button class="btn primary" id="playBtn">▶</button>
     <small>UWAIE - Kapo</small>
   </div>
 
   <script>
-    // Navegación con fade
     function pageGo(url){
       document.body.classList.add('fade-out');
       setTimeout(()=> location.href = url, 240);
     }
-
     document.getElementById('goRecuerdos').addEventListener('click', ()=> pageGo('recuerdos.html'));
     document.getElementById('goVolver').addEventListener('click', ()=> pageGo('index.html'));
 
-    // MUCHOS CORAZONES (sin confeti)
+    // WhatsApp Perú: +51 990367042
+    const WA_NUMBER = "51990367042";
+    const WA_TEXT = "Sí 💗 Acepto ser tu 14 de febrero. ❣️";
+    document.getElementById('btnWhats').href =
+      `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(WA_TEXT)}`;
+
+    // Corazones al aceptar
     function heartsBurst(){
       const wrap = document.getElementById('burst');
       wrap.innerHTML = '';
-      const n = 140;
+      const n = 160;
       for(let i=0;i<n;i++){
         const h = document.createElement('i');
-        // corazon rojo bonito
         h.textContent = (Math.random() > 0.45) ? '💗' : '❤';
         h.style.left = (Math.random()*100) + 'vw';
         h.style.fontSize = (14 + Math.random()*26) + 'px';
@@ -127,26 +128,15 @@
 
     const btnAsk = document.getElementById('btnAsk');
     const reveal = document.getElementById('reveal');
-    const btnWhats = document.getElementById('btnWhats');
-
-    // WhatsApp Perú: +51 990367042
-    const WA_NUMBER = "51990367042";
-    const WA_TEXT = "Sí 💗 Acepto ser tu 14 de febrero. ❣️";
-
-    btnWhats.href = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(WA_TEXT)}`;
-
     btnAsk.addEventListener('click', ()=>{
       heartsBurst();
-
       reveal.classList.add('show');
       reveal.setAttribute('aria-hidden','false');
-
-      // vibración (android)
       if(navigator.vibrate) navigator.vibrate([30,20,30]);
     });
   </script>
 
-  <!-- Tu lógica general (música, etc.) -->
   <script src="app.js"></script>
+  <script src="countdown.js"></script>
 </body>
 </html>
