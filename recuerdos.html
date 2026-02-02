@@ -6,9 +6,13 @@
   <title>Recuerdos 📸</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
+
 <body class="fade-in">
   <div class="bg"></div>
   <div class="hearts"></div>
+
+  <!-- BADGE contador -->
+  <div class="countdown-badge" data-countdown-badge></div>
 
   <audio id="bgm" preload="auto" loop>
     <source src="audio/uwaie.mp3" type="audio/mpeg">
@@ -21,16 +25,15 @@
         <h1>Momentos que me hacen sonreír</h1>
         <p>Toca una foto para verla mejor.</p>
 
-       <div class="section-title">Juntos 🤍</div>
-<div class="gallery" id="g1">
-  <img src="fotos/A1.jpeg" alt="Juntos A1" loading="lazy" />
-  <img src="fotos/A2.jpeg" alt="Juntos A2" loading="lazy" />
+        <div class="section-title">Arriba (A1, A2 + tus 3 favoritas) 🤍</div>
+        <div class="gallery" id="g1">
+          <img src="fotos/A1.jpeg" alt="Juntos A1" loading="lazy" />
+          <img src="fotos/A2.jpeg" alt="Juntos A2" loading="lazy" />
 
-  <img src="fotos/WhatsApp%20Image%202026-01-29%20at%202.11.17%20AM.jpeg" alt="Ella 1" loading="lazy" />
-  <img src="fotos/WhatsApp%20Image%202026-01-29%20at%202.16.44%20AM.jpeg" alt="Ella 2" loading="lazy" />
-  <img src="fotos/WhatsApp%20Image%202026-01-29%20at%202.22.03%20AM.jpeg" alt="Ella 3" loading="lazy" />
-</div>
-
+          <img src="fotos/WhatsApp%20Image%202026-01-29%20at%202.11.17%20AM.jpeg" alt="Ella 1" loading="lazy" />
+          <img src="fotos/WhatsApp%20Image%202026-01-29%20at%202.16.44%20AM.jpeg" alt="Ella 2" loading="lazy" />
+          <img src="fotos/WhatsApp%20Image%202026-01-29%20at%202.22.03%20AM.jpeg" alt="Ella 3" loading="lazy" />
+        </div>
 
         <div class="section-title">Cosas que me gustan y me hacen amarte ✨ (D1–D5)</div>
         <div class="gallery" id="g2">
@@ -40,7 +43,7 @@
           <img src="fotos/D4.jpeg" alt="D4" loading="lazy" />
           <img src="fotos/D5.jpeg" alt="D5" loading="lazy" />
         </div>
-        
+
         <div class="row" style="margin-top:16px;">
           <button class="btn primary" id="backCarta">Volver a la carta 💌</button>
           <button class="btn" id="backInicio">Inicio ↩️</button>
@@ -54,61 +57,78 @@
     <small>UWAIE - Kapo</small>
   </div>
 
-<div class="modal" id="modal" aria-hidden="true">
-  <div class="modal-bg" id="modalBg"></div>
-  <button class="modal-close" id="modalClose" aria-label="Cerrar">✕</button>
-  <img class="modal-img" id="modalImg" alt="Foto ampliada" />
-</div>
-
-</div>
-
+  <!-- MODAL (VISOR) anti-pegado -->
+  <div class="modal" id="modal" aria-hidden="true">
+    <div class="modal-bg" id="modalBg"></div>
+    <div class="modal-box" role="dialog" aria-label="Foto ampliada">
+      <button class="modal-close" id="modalClose" aria-label="Cerrar">✕</button>
+      <img class="modal-img" id="modalImg" alt="Foto ampliada" />
+    </div>
+  </div>
 
   <script>
-  const modal = document.getElementById('modal');
-  const modalImg = document.getElementById('modalImg');
-  const modalBg = document.getElementById('modalBg');
-  const modalClose = document.getElementById('modalClose');
-
-  function openModal(src){
-    modalImg.src = src;
-    modal.classList.add('open');
-    modal.setAttribute('aria-hidden','false');
-    document.body.style.overflow = 'hidden'; // evita scroll detrás
-  }
-
-  function closeModal(){
-    modal.classList.remove('open');
-    modal.setAttribute('aria-hidden','true');
-    modalImg.src = '';
-    document.body.style.overflow = ''; // restaura
-  }
-
-  // Abrir desde cualquier galería (g1, g2, g3 si existen)
-  ['g1','g2','g3'].forEach(id=>{
-    const g = document.getElementById(id);
-    if(!g) return;
-    g.addEventListener('click', (e)=>{
-      const img = e.target.closest('img');
-      if(!img) return;
-      openModal(img.src);
-    });
-  });
-
-  // Cerrar: tap/click fuera + botón
-  modalBg.addEventListener('click', closeModal);
-  modalClose.addEventListener('click', closeModal);
-
-  // Cerrar con ESC (PC)
-  document.addEventListener('keydown', (e)=>{
-    if(e.key === 'Escape' && modal.classList.contains('open')){
-      closeModal();
+    function pageGo(url){
+      document.body.classList.add('fade-out');
+      setTimeout(()=> location.href = url, 240);
     }
-  });
+    document.getElementById('backCarta').addEventListener('click', ()=> pageGo('sorpresa.html'));
+    document.getElementById('backInicio').addEventListener('click', ()=> pageGo('index.html'));
+  </script>
 
-  // Opcional: cerrar tocando la imagen (móvil friendly)
-  modalImg.addEventListener('click', closeModal);
-</script>
+  <!-- JS MODAL (a prueba de fallos, móvil OK) -->
+  <script>
+    (function () {
+      const modal = document.getElementById('modal');
+      const modalImg = document.getElementById('modalImg');
+      const modalBg = document.getElementById('modalBg');
+      const modalClose = document.getElementById('modalClose');
+
+      if(!modal || !modalImg || !modalBg || !modalClose) return;
+
+      function openModal(src){
+        modalImg.src = src;
+        modal.classList.add('open');
+        modal.setAttribute('aria-hidden','false');
+        document.body.classList.add('modal-open');
+      }
+
+      function closeModal(){
+        modal.classList.remove('open');
+        modal.setAttribute('aria-hidden','true');
+        modalImg.src = '';
+        document.body.classList.remove('modal-open');
+      }
+
+      // Delegación: cualquier .gallery img abre modal
+      document.addEventListener('click', (e) => {
+        const img = e.target.closest('.gallery img');
+        if(!img) return;
+        e.preventDefault();
+        openModal(img.getAttribute('src'));
+      });
+
+      // Cerrar: toque fuera, X, tocar imagen
+      modalBg.addEventListener('click', closeModal);
+      modalClose.addEventListener('click', closeModal);
+      modalImg.addEventListener('click', closeModal);
+
+      // ESC (PC)
+      document.addEventListener('keydown', (e)=>{
+        if(e.key === 'Escape' && modal.classList.contains('open')){
+          closeModal();
+        }
+      });
+
+      // Evita “pegado” en iOS
+      modal.addEventListener('touchmove', (e)=> {
+        if(modal.classList.contains('open')) e.preventDefault();
+      }, { passive: false });
+
+      window.addEventListener('pagehide', closeModal);
+    })();
+  </script>
 
   <script src="app.js"></script>
+  <script src="countdown.js"></script>
 </body>
 </html>
