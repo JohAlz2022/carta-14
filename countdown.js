@@ -1,7 +1,6 @@
-// countdown.js — contador regresivo al 11 de abril (America/Lima)
+// countdown.js — cuenta regresiva al 11 de abril (America/Lima)
 // Cambia TARGET si quieres hora exacta:
 // "2026-04-11T00:00:00-05:00" (medianoche) o "2026-04-11T12:00:00-05:00" (mediodía)
-
 (function(){
   const TARGET = new Date("2026-04-11T12:00:00-05:00").getTime();
 
@@ -21,14 +20,14 @@
     const now = Date.now();
     const t = fmt(TARGET - now);
 
-    // 1) Badge fijo (arriba)
+    // Badge fijo (todas las páginas)
     document.querySelectorAll("[data-countdown-badge]").forEach(el=>{
       el.innerHTML = t.done
         ? `¡Hoy nos vemos! 💗`
         : `Faltan <b>${t.d}</b>d <b>${pad(t.h)}</b>h <b>${pad(t.m)}</b>m <b>${pad(t.s)}</b>s ✨`;
     });
 
-    // 2) Contador dentro de carta (si existe)
+    // Contador en carta (sorpresa.html)
     const box = document.getElementById("countdownBox");
     if (box){
       const dEl = document.getElementById("cd_d");
