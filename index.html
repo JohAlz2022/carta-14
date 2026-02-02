@@ -3,53 +3,34 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Para ti 💘</title>
+  <title>Para mi persona favorita</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body class="fade-in">
   <div class="bg"></div>
   <div class="hearts"></div>
 
-  <div class="countdown-dock" id="cdDock" aria-label="Cuenta regresiva">
-  <div class="cd-title">Faltan para volver a vernos, mi amor</div>
-
-  <div class="cd-clock" data-countdown-badge>
-    <!-- countdown.js llenará este texto si fallara el reloj (fallback) -->
-  </div>
-
-  <div class="cd-clock-grid" aria-hidden="true">
-    <div class="cd-chip"><span class="cd-num" id="dock_d">0</span><span class="cd-lab">DÍAS</span></div>
-    <div class="cd-chip"><span class="cd-num" id="dock_h">00</span><span class="cd-lab">HRS</span></div>
-    <div class="cd-chip"><span class="cd-num" id="dock_m">00</span><span class="cd-lab">MIN</span></div>
-    <div class="cd-chip"><span class="cd-num" id="dock_s">00</span><span class="cd-lab">SEG</span></div>
-  </div>
-</div>
-
-
-  <audio id="bgm" preload="auto" loop>
-    <source src="audio/uwaie.mp3" type="audio/mpeg">
-  </audio>
-
   <main class="page">
     <div class="container">
       <section class="card">
-        <p class="mini">Para ti, mi amor 🤍</p>
+        <p class="mini">Para mi persona favorita</p>
         <h1>Lo mejor que me pasó este año…</h1>
-        <p>te hice algo especial. Espero te guste. <b>Hecho con amor</b> 🤍</p>
+        <p>Te hice algo especial, mi amor. Espero te guste. Hecho con amor 🤍</p>
 
         <div class="row">
           <button class="btn primary pulse" id="goSorpresa">Ver sorpresa ✨</button>
+          <button class="btn" id="goRecuerdos">Recuerdos 📸</button>
         </div>
 
-        <div class="row" style="margin-top:12px;">
-          <button class="btn" onclick="location.href='historia.html'">Ver historia tipo TikTok ✨</button>
-        </div>
-
-        <p style="margin-top:14px;">Ábrelo con calma y con audífonos 😌</p>
+        <p style="margin-top:12px; font-weight:800; opacity:.85;">
+          Mi amor, abre esto con calma y con audífonos 😊
+        </p>
       </section>
     </div>
   </main>
 
+  <!-- Audio + reproductor fijo -->
+  <audio id="bgm" preload="auto" loop></audio>
   <div class="player">
     <button class="btn primary" id="playBtn">▶</button>
     <small>UWAIE - Kapo</small>
@@ -61,9 +42,8 @@
       setTimeout(()=> location.href = url, 240);
     }
     document.getElementById('goSorpresa').addEventListener('click', ()=> pageGo('sorpresa.html'));
+    document.getElementById('goRecuerdos').addEventListener('click', ()=> pageGo('recuerdos.html'));
   </script>
-
   <script src="app.js"></script>
-  <script src="countdown.js"></script>
 </body>
 </html>
