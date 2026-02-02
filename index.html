@@ -10,6 +10,9 @@
   <div class="bg"></div>
   <div class="hearts"></div>
 
+  <!-- BADGE contador -->
+  <div class="countdown-badge" data-countdown-badge></div>
+
   <audio id="bgm" preload="auto" loop>
     <source src="audio/uwaie.mp3" type="audio/mpeg">
   </audio>
@@ -19,13 +22,17 @@
       <section class="card">
         <p class="mini">Para ti, mi amor 🤍</p>
         <h1>Lo mejor que me pasó este año…</h1>
-        <p>te hice algo especial. Espero te guste. <b>Hecho con amor mi Dani</b> 🤍</p>
+        <p>te hice algo especial. Espero te guste. <b>Hecho con amor</b> 🤍</p>
 
         <div class="row">
           <button class="btn primary pulse" id="goSorpresa">Ver sorpresa ✨</button>
         </div>
 
-        <p style="margin-top:14px;">Mi Dani, abre esto con calma y con audífonos 😌</p>
+        <div class="row" style="margin-top:12px;">
+          <button class="btn" onclick="location.href='historia.html'">Ver historia tipo TikTok ✨</button>
+        </div>
+
+        <p style="margin-top:14px;">Ábrelo con calma y con audífonos 😌</p>
       </section>
     </div>
   </main>
@@ -40,10 +47,10 @@
       document.body.classList.add('fade-out');
       setTimeout(()=> location.href = url, 240);
     }
-    document.getElementById('goSorpresa').addEventListener('click', ()=>{
-      pageGo('sorpresa.html');
-    });
+    document.getElementById('goSorpresa').addEventListener('click', ()=> pageGo('sorpresa.html'));
   </script>
+
   <script src="app.js"></script>
+  <script src="countdown.js"></script>
 </body>
 </html>
