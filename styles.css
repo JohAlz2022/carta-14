@@ -8,7 +8,6 @@
 
   --pink1:#ff5b8f;
   --pink2:#ffb8c8;
-
   --nude1:#fff0e7;
   --nude2:#ffe6ef;
   --sky:#e7f6ff;
@@ -16,37 +15,27 @@
   --r: 24px;
 }
 
-*{ box-sizing:border-box; }
-html,body{ height:100%; }
+*{box-sizing:border-box}
+html,body{height:100%}
 
 body{
   margin:0;
   font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
   color: var(--ink);
+  background: var(--nude1);
   overflow-x:hidden;
-
-  /* FONDO CONTINUO (no se corta) */
-  background:
-    radial-gradient(1200px 700px at 15% 15%, rgba(255, 173, 200, .55), transparent 60%),
-    radial-gradient(1200px 700px at 85% 20%, rgba(255, 210, 180, .55), transparent 60%),
-    radial-gradient(900px 600px at 70% 85%, rgba(255, 200, 230, .45), transparent 60%),
-    linear-gradient(180deg, #fff5f7 0%, #fff2ea 55%, #fff6f1 100%);
-  background-attachment: fixed;
 }
 
-/* Capas decorativas */
+/* Fondo nude / verano */
 .bg{
   position: fixed;
   inset: 0;
-  z-index:-3;
-  pointer-events:none;
-
+  z-index:-2;
   background:
-    radial-gradient(900px 520px at 12% 18%, rgba(255,91,143,.22), transparent 60%),
-    radial-gradient(900px 520px at 88% 14%, rgba(255,184,200,.30), transparent 60%),
-    radial-gradient(980px 620px at 30% 95%, rgba(231,246,255,.75), transparent 55%),
+    radial-gradient(900px 520px at 12% 18%, rgba(255,91,143,.20), transparent 60%),
+    radial-gradient(900px 520px at 88% 14%, rgba(255,184,200,.28), transparent 60%),
+    radial-gradient(980px 620px at 30% 95%, rgba(231,246,255,.92), transparent 55%),
     linear-gradient(180deg, var(--nude1), var(--nude2) 45%, #fff 100%);
-
   animation: drift 8.5s ease-in-out infinite alternate;
 }
 @keyframes drift{ from{transform:translateY(0)} to{transform:translateY(-10px)} }
@@ -54,25 +43,24 @@ body{
 .hearts{
   position: fixed;
   inset: 0;
-  z-index:-2;
+  z-index:-1;
   pointer-events:none;
-  opacity:.30;
+  opacity:.28;
   background:
     radial-gradient(circle at 10% 30%, rgba(255,255,255,.45), transparent 24%),
     radial-gradient(circle at 70% 20%, rgba(255,255,255,.30), transparent 20%),
     radial-gradient(circle at 25% 80%, rgba(255,255,255,.25), transparent 18%);
 }
 
-/* Layout base */
 .page{
   min-height:100vh;
   display:flex;
   align-items:center;
   justify-content:center;
-  padding: 22px 16px 120px; /* espacio para el player */
+  padding: 22px 16px 92px;
   text-align:center;
-  background: transparent;
 }
+
 .container{ width:min(980px,100%); }
 
 .card{
@@ -84,24 +72,24 @@ body{
   backdrop-filter: blur(10px);
 }
 
-/* Transiciones */
 .fade-in{ animation: fadeIn .45s ease both; }
 .fade-out{ animation: fadeOut .25s ease both; }
 @keyframes fadeIn{ from{opacity:0; transform:translateY(14px)} to{opacity:1; transform:none} }
 @keyframes fadeOut{ to{opacity:0; transform:translateY(12px)} }
 
-/* Tipografía */
 .mini{
   color: rgba(42,28,34,.78);
   letter-spacing:.2px;
   font-size: 14px;
   margin:0 0 10px;
 }
+
 h1{
   margin: 8px 0 12px;
   font-size: clamp(30px, 5.2vw, 58px);
   line-height: 1.05;
 }
+
 p{
   margin: 0 0 10px;
   color: var(--muted);
@@ -109,7 +97,6 @@ p{
   font-size: 16px;
 }
 
-/* Botones */
 .row{
   display:flex;
   flex-wrap:wrap;
@@ -117,6 +104,7 @@ p{
   justify-content:center;
   margin-top: 16px;
 }
+
 .stack{
   display:flex;
   flex-direction:column;
@@ -170,13 +158,13 @@ p{
   100%{ transform: translateX(80%) rotate(10deg); opacity:.18}
 }
 
-/* Carta */
 .letter{
   margin-top: 12px;
   padding: 14px;
   border-radius: 18px;
   border: 1px dashed rgba(255, 91, 143, .22);
   background: rgba(255,255,255,.40);
+  text-align: left;
 }
 
 /* Mensaje final */
@@ -192,7 +180,7 @@ p{
   color: rgba(42,28,34,.90);
   font-size: 14px;
   letter-spacing:.3px;
-  font-weight: 800;
+  font-weight: 900;
 }
 .gallery{
   display:grid;
@@ -210,25 +198,20 @@ p{
   border: 1px solid rgba(42,28,34,.10);
   cursor:pointer;
   transition: transform .18s ease, filter .2s ease;
+  background: rgba(255,255,255,.35);
 }
 .gallery img:hover{ transform: translateY(-2px) scale(1.01); filter: brightness(1.03); }
 
-/* =========================================
-   MODAL (visor de fotos) — centrado + responsive
-   - No se “descuadra”
-   - ESC se maneja con JS, pero aquí queda listo visualmente
-   ========================================= */
+/* Modal (1 sola versión, sin duplicados) */
 .modal{
   position: fixed;
   inset: 0;
   width: 100vw;
   height: 100dvh;
-
-  display: none;
-  align-items: center;
-  justify-content: center;
-
-  padding: 18px;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding: 14px;
   z-index: 999998;
 }
 .modal.open{ display:flex; }
@@ -239,69 +222,48 @@ p{
   background: rgba(20,10,15,.58);
 }
 
-/* Contenedor del modal */
 .modal-box{
   position: relative;
   width: min(980px, 92vw);
   height: min(86dvh, 720px);
-
   border-radius: 18px;
   border: 1px solid rgba(255,255,255,.45);
   box-shadow: 0 18px 50px rgba(0,0,0,.35);
-  background: rgba(255,255,255,.16);
-
+  background: rgba(255,255,255,.20);
   overflow:hidden;
   display:flex;
   align-items:center;
   justify-content:center;
 }
 
-/* Imagen dentro del modal: SIEMPRE centrada, sin cortar */
 .modal-img{
-  width: 100%;
-  height: 100%;
+  width:100%;
+  height:100%;
   object-fit: contain;
-  object-position: center;
+  object-position:center;
 }
 
-/* Botón cerrar (clave para móvil) */
 .modal-close{
   position: absolute;
   top: 12px;
   right: 12px;
   z-index: 999999;
-
   width: 44px;
   height: 44px;
   border-radius: 14px;
-
   border: 1px solid rgba(255, 91, 143, .22);
-  background: rgba(255,255,255,.84);
-
-  cursor: pointer;
+  background: rgba(255,255,255,.82);
+  cursor:pointer;
   font-size: 22px;
-  font-weight: 950;
+  font-weight: 900;
   line-height: 1;
 }
 
-/* En móvil: que use más pantalla */
-@media (max-width: 520px){
-  .modal{ padding: 12px; }
-  .modal-box{
-    width: 96vw;
-    height: 82dvh;
-    border-radius: 16px;
-  }
-}
-
-/* =========================================
-   PLAYER fijo abajo-derecha (siempre)
-   ========================================= */
+/* Player fijo abajo-derecha (1 sola versión) */
 .player{
   position: fixed;
   right: 14px;
   bottom: 14px;
-
   z-index: 999999;
 
   display:flex;
@@ -310,21 +272,16 @@ p{
 
   padding: 10px 12px;
   border-radius: 18px;
-
   background: rgba(255,255,255,.72);
   border: 1px solid rgba(255, 91, 143, .22);
   backdrop-filter: blur(10px);
   box-shadow: 0 16px 45px rgba(0,0,0,.15);
 }
-.player small{ color: rgba(42,28,34,.72); font-weight: 800; }
+.player small{ color: rgba(42,28,34,.72); font-weight: 900; }
 
 @media (max-width: 520px){
-  .player{
-    right: 10px;
-    bottom: 10px;
-    padding: 9px 10px;
-  }
-  .player small{ display:none; } /* opcional */
+  .player{ right: 10px; bottom: 10px; padding: 9px 10px; }
+  .player small{ display:none; }
 }
 
 /* Corazones burst */
@@ -354,7 +311,7 @@ p{
   left: 50%;
   bottom: 78px;
   transform: translateX(-50%);
-  background: rgba(255,255,255,.82);
+  background: rgba(255,255,255,.86);
   border: 1px solid rgba(255,91,143,.22);
   padding: 10px 12px;
   border-radius: 14px;
@@ -362,7 +319,7 @@ p{
   opacity:0;
   transition: opacity .2s ease, transform .2s ease;
   color: rgba(42,28,34,.85);
-  font-weight: 800;
+  font-weight: 900;
   z-index: 999999;
 }
 .toast.show{
@@ -371,7 +328,7 @@ p{
 }
 
 /* =========================================
-   COUNTDOWN GRANDE (reloj fijo centro-izq)
+   COUNTDOWN ÚNICO (dock grande fijo izq)
    ========================================= */
 .countdown-dock{
   position: fixed;
@@ -381,7 +338,7 @@ p{
   z-index: 999997;
 
   width: min(320px, 88vw);
-  padding: 14px 14px;
+  padding: 14px;
   border-radius: 22px;
 
   background: rgba(255,255,255,.78);
@@ -393,10 +350,17 @@ p{
 }
 
 .cd-title{
-  font-weight: 950;
+  font-weight: 1000;
   font-size: 13px;
   line-height: 1.2;
   color: rgba(42,28,34,.88);
+  margin-bottom: 8px;
+}
+
+.cd-sub{
+  font-weight: 900;
+  font-size: 13px;
+  color: rgba(42,28,34,.78);
   margin-bottom: 10px;
 }
 
@@ -407,7 +371,7 @@ p{
 }
 
 .cd-chip{
-  background: rgba(255,255,255,.78);
+  background: rgba(255,255,255,.82);
   border: 1px solid rgba(42,28,34,.08);
   border-radius: 16px;
   padding: 10px 8px;
@@ -432,12 +396,12 @@ p{
   letter-spacing: .8px;
 }
 
-/* En móviles: se va abajo-centro para no tapar */
+/* En móviles: abajo-centro encima del reproductor */
 @media (max-width: 600px){
   .countdown-dock{
     left: 50%;
     top: auto;
-    bottom: 74px; /* encima del player */
+    bottom: 74px;
     transform: translateX(-50%);
     width: min(360px, 94vw);
   }
